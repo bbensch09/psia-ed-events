@@ -36,9 +36,9 @@ class Instructor < ActiveRecord::Base
   end
 
   def self.seed_temp_instructors
-    first_names = ['Jim','Garry','Steven','Adam','Kelly','Natalie','Anita','Connie','Brian','Chris','Christian','Andrew','Ryan','Seth','Justin','Michael','Cameron','Cindy','Ryan','Jerry']
-    last_names =  ['Kinney','Cox','Church','Garon','Larson','Barros','Hill','Wang','Bensch','Prattis','Herlihy','Eells','Hoben','Evanhoe','Palmer','Beler','Ulhriy','Palfy','Walker','Jones']
-    (0..19).to_a.each do |number|
+    first_names = ['Bryan','Heidi','Mitch','Jerry']
+    last_names =  ['Schilling','Ettliger','Dion','Smith']
+    (0..3).to_a.each do |number|
       Instructor.create!({
         first_name: first_names[number],
         last_name: last_names[number],

@@ -7,14 +7,14 @@ default: &default
 
 development:
   <<: *default
-  database: snowschoolers_development
+  database: psia_development
 
 test:
   <<: *default
-  database: snowschoolers_test
+  database: psia_test
 
 production:
   <<: *default
-  database: snowschoolers_development
+  database: psia_development
   # username: snowschoolers
   # password: bb4ss109
