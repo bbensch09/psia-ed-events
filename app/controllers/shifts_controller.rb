@@ -1,6 +1,7 @@
 class ShiftsController < ApplicationController
   before_action :set_shift, only: [:show, :edit, :update, :destroy]
   before_action :set_week_start_monday  
+  skip_before_action :authenticate_user!
 
   # GET /shifts
   # GET /shifts.json
@@ -8,7 +9,7 @@ class ShiftsController < ApplicationController
     if params[:start_date]
       @shifts = Shift.all.to_a.keep_if{|shift| (shift.start_time.to_date - params[:start_date].to_date) <=6 }
     else
-      @shifts = Shift.all.to_a.keep_if{|shift| (shift.start_time.to_date - Date.today) <=6 }
+      @shifts = Shift.all.to_a.keep_if{|shift| (shift.start_time.to_date - Date.today) <=14 }
     end
   end
 

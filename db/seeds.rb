@@ -1,4 +1,4 @@
-=begin
+
 resorts = [
       "Alpine Meadows",
       "Alta",
@@ -25,7 +25,7 @@ resorts.each do |resort|
   })
 end
 
-
+=begin
 hw_seed_accounts = [
   "brian+hw_instructor_1@snowschoolers.com",
   "brian+hw_instructor_2@snowschoolers.com",
@@ -296,6 +296,8 @@ Product.create!({
   calendar_period: 'Peak'
   })
 
+=end
+
 puts "seed complete, locations created."
 
 # ski_levels = ["Level 1 - first-time ever, no previous experience.",
@@ -307,6 +309,10 @@ puts "seed complete, locations created."
 #               "Level 7 - demonstrates edge control in carving turns on advanced terrain.",
 #               "Level 8 - safely navigates moguls and off-piste terrain.",
 #               "Level 9 - confidently and safely skis expert-only (double-black diamond) terrain."]
+
+Sport.create!({name: "Ski Instructor"})
+Sport.create!({name: "Telemark Instructor"})
+Sport.create!({name: "Snowboard Instructor"})
 
 ski_levels = ["Level 1 - first-time ever, no previous experience.",
               "Level 2 - can safely stop on beginner green circle terrain.",
@@ -329,8 +335,8 @@ ski_levels.each do |level|
   value: SnowboardLevel.count + 1
   })
 end
-puts "Ski and snowboard level 1-9 created.
-=end
+puts "Ski and snowboard level 1-9 created."
+
 
 #BEGIN seed file to setup for Demo
 Instructor.seed_temp_instructors

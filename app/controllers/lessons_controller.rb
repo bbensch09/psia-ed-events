@@ -1,6 +1,6 @@
 class LessonsController < ApplicationController
   respond_to :html
-  skip_before_action :authenticate_user!, only: [:new, :new_request, :create, :complete, :confirm_reservation, :update, :show, :edit]
+  skip_before_action :authenticate_user!, only: [:schedule, :new, :new_request, :create, :complete, :confirm_reservation, :update, :show, :edit]
   before_action :save_lesson_params_and_redirect, only: [:create]
   before_action :create_lesson_from_session, only: [:create]
 

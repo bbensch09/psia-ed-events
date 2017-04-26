@@ -37,8 +37,8 @@ class Shift < ApplicationRecord
   	scheduled_instructors = Shift.all.to_a.keep_if { |shift| shift.start_time.to_date == date && shift.status == "Scheduled"}
   	# return scheduled_instructors.count
   	avg_capcity_per_instructor = 6
-  	total_capacity = avg_capcity_per_instructor * scheduled_instructors.count
-  	capacity_utilization = (total_students.to_f / total_capacity.to_f) *100
+  	return total_capacity = avg_capcity_per_instructor * scheduled_instructors.count
+  	# capacity_utilization = (total_students.to_f / total_capacity.to_f) *100
   end
 
   def shift_status_color

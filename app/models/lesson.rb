@@ -66,7 +66,7 @@ class Lesson < ActiveRecord::Base
           terms_accepted: true
         })
       puts "!!! - lesson created, creating students for lesson"
-      last_lesson_product_age_type = Lesson.last.product.age_type      
+      last_lesson_product_age_type = ['Child','Adult'].sample
       if last_lesson_product_age_type == "Child"
         sample_age = (4..12).to_a.sample
       elsif last_lesson_product_age_type == "Adult"
