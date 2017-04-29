@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :shifts
+  resources :events
   resources :product_calendars
   resources :selfies
   resources :contestants

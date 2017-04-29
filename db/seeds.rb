@@ -1,12 +1,5 @@
 
-resorts = [
-      "Alpine Meadows",
-      "Alta",
-      "Aspen",
-      "Bear Valley",
-      "Diamond Peak",
-      "Dodge Ridge",
-      "Donner Ski Ranch",
+resorts = [      
       "Homewood",
       "Jackson Hole",
       "Mt. Rose",
@@ -24,6 +17,7 @@ resorts.each do |resort|
   name: resort
   })
 end
+
 
 =begin
 hw_seed_accounts = [
@@ -341,6 +335,7 @@ puts "Ski and snowboard level 1-9 created."
 #BEGIN seed file to setup for Demo
 Instructor.seed_temp_instructors
 
+=begin
 (0...5).to_a.each do |day_num|
     puts "!!! - beginning to create lessons, shifts, sections for day_num: #{day_num}"
     num_lessons = (15..55).to_a.sample
@@ -349,3 +344,4 @@ Instructor.seed_temp_instructors
     Lesson.seed_lessons(Date.today+day_num,num_lessons)
   end
     puts "!!!! completed seeding for 5 days"
+=end

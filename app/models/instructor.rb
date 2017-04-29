@@ -1,6 +1,7 @@
 class Instructor < ActiveRecord::Base
   belongs_to :user
   has_and_belongs_to_many :locations
+  # has_and_belongs_to_many :preferred_locations
   has_and_belongs_to_many :ski_levels
   has_and_belongs_to_many :snowboard_levels
   has_many :lesson_actions

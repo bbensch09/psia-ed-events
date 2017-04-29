@@ -1,10 +1,10 @@
-class Shift < ApplicationRecord
+class Event < ApplicationRecord
 	  belongs_to :instructor
 	  has_one :section
 
-  def self.create_instructor_shifts(date)
+  def self.create_instructor_events(date)
   	Instructor.all.to_a.each do |instructor|
-  		Shift.create!({
+  		Event.create!({
   			start_time: "#{date.to_s} 08:00:00",
   			end_time: "#{date.to_s} 16:00:00",
   			name: ['Snow Rangers - Ski', 'Snow Rangers - Snowboard','Mountain Rangers - Ski', 'Mountain Rangers - Snowboard','Adult Groups - Ski','Adult Groups - Snowboard','Private - Ski','Private - Snowboard'].sample,
@@ -34,14 +34,14 @@ class Shift < ApplicationRecord
 
   def self.capacity(date)
   	total_students = Lesson.bookings_for_date(date)
-  	scheduled_instructors = Shift.all.to_a.keep_if { |shift| shift.start_time.to_date == date && shift.status == "Scheduled"}
+  	scheduled_instructors = Event.all.to_a.keep_if { |event| event.start_time.to_date == date && event.status == "Scheduled"}
   	# return scheduled_instructors.count
   	avg_capcity_per_instructor = 6
   	return total_capacity = avg_capcity_per_instructor * scheduled_instructors.count
   	# capacity_utilization = (total_students.to_f / total_capacity.to_f) *100
   end
 
-  def shift_status_color
+  def event_status_color
   	case self.status
   	when 'TBD'
   		return 'yellow-shift'

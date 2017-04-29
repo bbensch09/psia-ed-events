@@ -110,19 +110,23 @@
     <br><br>
   </div>
   <!-- <h4> Preferred Resorts (select up to 4)</h4> -->
-  <h4> <b> Where:</b> All lessons currently take place at Homewood</h4>
   <div class="col-md-12">
-    <% if current_user && (current_user.email == "brian@snowschoolers.com" || current_user.user_type == "Partner") %>
+  <h4> <b> Primary resort - where do you typically teach during the season?</b> </h4>
       <%= f.collection_check_boxes :location_ids, Location.all, :id, :name do |location_item| %>
       <div class="collection-check-box">
         <%= location_item.check_box %>
         <%= location_item.label %>
       </div>
       <% end %>
-      <% else %>
-      <%= f.text_area :preferred_locations, placeholder: "Are you able to commute Homewood? Are there other resorts you prefer to teach at? Let us know, as we're actively talking to other resort partners in Tahoe." , class: 'form-control', required:true %>
-    <% end %>
-    <br>
+  </div>
+  <div class="col-md-12">
+  <h4> <b> Preferred resorts - what other resorts are you happy to teach at?</b> </h4>
+      <%= f.collection_check_boxes :location_ids, Location.all, :id, :name do |location_item| %>
+      <div class="collection-check-box">
+        <%= location_item.check_box %>
+        <%= location_item.label %>
+      </div>
+      <% end %>
   </div>
   <h4><b>Professional certifications</b> (PSIA, AASI, etc.) </h4>
   <div class="col-md-12">

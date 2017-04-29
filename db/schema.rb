@@ -111,13 +111,22 @@ ActiveRecord::Schema.define(version: 20170420182826) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
 
+  create_table "events", force: :cascade do |t|
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string   "name"
+    t.string   "status"
+    t.integer  "instructor_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
   create_table "instructors", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.string   "username"
     t.string   "certification"
     t.string   "phone_number"
-    t.string   "preferred_locations"
     t.string   "sport"
     t.text     "bio"
     t.text     "intro"
@@ -140,6 +149,7 @@ ActiveRecord::Schema.define(version: 20170420182826) do
     t.boolean  "adults_eligibility"
     t.integer  "age"
     t.date     "dob"
+    t.string   "preferred_locations"
   end
 
   create_table "instructors_locations", id: false, force: :cascade do |t|
@@ -324,16 +334,6 @@ ActiveRecord::Schema.define(version: 20170420182826) do
     t.string   "social_network"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-  end
-
-  create_table "shifts", force: :cascade do |t|
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.string   "name"
-    t.string   "status"
-    t.integer  "instructor_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
   end
 
   create_table "ski_levels", force: :cascade do |t|

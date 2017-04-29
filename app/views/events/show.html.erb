@@ -2,28 +2,28 @@
 
 <p>
   <strong>Start time:</strong>
-  <%= @shift.start_time %>
+  <%= @event.start_time %>
 </p>
 
 <p>
   <strong>End time:</strong>
-  <%= @shift.end_time %>
+  <%= @event.end_time %>
 </p>
 
 <p>
   <strong>Name:</strong>
-  <%= @shift.name %>
+  <%= @event.name %>
 </p>
 
 <p>
   <strong>Status:</strong>
-  <%= @shift.status %>
+  <%= @event.status %>
 </p>
 
 <p>
   <strong>Instructor:</strong>
-  <%= @shift.instructor_id %>
+  <%= @event.instructor_id %>
 </p>
 
-<%= link_to 'Edit', edit_shift_path(@shift) %> |
-<%= link_to 'Back', shifts_path %>
+<%= link_to 'Edit', edit_event_path(@event) %> |
+<%= link_to 'Back', events_path %>
