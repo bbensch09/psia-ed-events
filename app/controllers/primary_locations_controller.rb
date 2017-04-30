@@ -18,6 +18,11 @@ class PrimaryLocationsController < ApplicationController
    redirect_to primary_locations_path, notice: "New locations data successfully imported."
   end
 
+  def delete_all
+    PrimaryLocation.delete_all
+    redirect_to primary_locations_path, notice: "All primary locations have been deleted."
+  end
+
   # GET /primary_locations/1
   # GET /primary_locations/1.json
   def show

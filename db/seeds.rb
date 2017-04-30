@@ -308,15 +308,14 @@ Sport.create!({name: "Ski Instructor"})
 Sport.create!({name: "Telemark Instructor"})
 Sport.create!({name: "Snowboard Instructor"})
 
-ski_levels = ["Level 1 - first-time ever, no previous experience.",
-              "Level 2 - can safely stop on beginner green circle terrain.",
-              "Level 3 - can makes wedge turns (heel-side turns for snowboarding) in both directions on beginner terrain.",
-              "Level 4 - can link turns with moderate speed on all beginner terrain.",
-              "Level 5 - can make mostly parallel turns (S-turns for snowboarding) and safely navigate intermediate runs.",
-              "Level 6 - can confidently link parallel turns across all intermediate terrain.",
-              "Level 7 - can control speed, rhythm, and shape of turns across variety of intermediate and advanced terrain.",
-              "Level 8 - can ski moguls and off-piste terrain in all snow conditions.",
-              "Level 9 - can confidently and safely ski expert-only (double-black diamond) terrain."]
+ski_levels = ["Trainer - Level 1",
+              "Trainer - Level 2",
+              "Trainer - Level 3",
+              "Examiner - Level 1",
+              "Examiner - Level 2",
+              "Examiner - Level 3",
+              "Examiner - Ed Staff"
+              ]
 
 ski_levels.each do |level|
   SkiLevel.create!({
@@ -333,7 +332,7 @@ puts "Ski and snowboard level 1-9 created."
 
 
 #BEGIN seed file to setup for Demo
-Instructor.seed_temp_instructors
+# Instructor.seed_temp_instructors
 
 =begin
 (0...5).to_a.each do |day_num|

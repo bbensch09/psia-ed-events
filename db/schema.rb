@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170430212557) do
+ActiveRecord::Schema.define(version: 20170430222141) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,21 +135,17 @@ ActiveRecord::Schema.define(version: 20170430212557) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "city"
-    t.integer  "adults_initial_rank"
-    t.integer  "kids_initial_rank"
     t.integer  "overall_initial_rank"
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
-    t.string   "how_did_you_hear"
     t.string   "confirmed_certification"
-    t.boolean  "kids_eligibility"
-    t.boolean  "seniors_eligibility"
-    t.boolean  "adults_eligibility"
     t.integer  "age"
     t.date     "dob"
-    t.string   "preferred_locations"
+    t.string   "contact_email"
+    t.integer  "performance_ranking"
+    t.integer  "home_resort_location"
   end
 
   create_table "instructors_locations", id: false, force: :cascade do |t|

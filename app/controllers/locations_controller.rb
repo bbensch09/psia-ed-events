@@ -18,6 +18,11 @@ class LocationsController < ApplicationController
    redirect_to locations_path, notice: "New locations data successfully imported."
   end
 
+  def delete_all
+    Location.delete_all
+    redirect_to locations_path, notice: "All locations have been deleted."
+  end
+
   # GET /locations/1
   # GET /locations/1.json
   def show

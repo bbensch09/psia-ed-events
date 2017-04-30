@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   resources :primary_locations do 
             collection {post :import}
+            collection {post :delete_all}
   end
   resources :events
   resources :product_calendars
@@ -47,6 +48,7 @@ Rails.application.routes.draw do
 
   resources :locations do 
         collection {post :import}
+        collection {post :delete_all}
   end
   resources :charges
 
