@@ -125,6 +125,8 @@ Rails.application.routes.draw do
 
 
   resources :instructors do
+    collection {post :import}
+    collection {post :delete_all}
     member do
         post :verify
         post :revoke

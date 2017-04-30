@@ -17,6 +17,27 @@ class Instructor < ActiveRecord::Base
         :bucket => 'snowschoolers'
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
+  def self.import(file)
+    CSV.foreach(file.path, headers:true) do |row|
+        instructor = Instructor.find_or_create_by(id: row['id'])
+        instructor.update_attributes(row.to_hash)      
+    end
+  end
+
+  def self.to_csv(options = {})
+    desired_columns = %w{ id  first_name  last_name contact_email phone_number  sport_ids primary_location_ids  location_ids  ski_level snowboard_level status  performance_ranking
+    }
+    CSV.generate(headers: true) do |csv|
+      csv << desired_columns
+      all.each do |location|
+        csv << location.attributes.values_at(*desired_columns)
+      end
+    end
+  end
+
+
+
+
   def self.scheduled_for_date(date)
     eligible_shifts = Shift.all.to_a.keep_if {|shift| shift.start_time.to_date == date}
     eligible_shifts = eligible_shifts.keep_if { |shift| shift.status == "Scheduled" || shift.status == "Assigned"}
@@ -135,20 +156,7 @@ class Instructor < ActiveRecord::Base
   end
 
   def referral_source
-    case self.how_did_you_hear.to_i
-    when 1
-      return 'From a friend'
-    when 2
-      return 'Facebook'
-    when 3
-      return 'Google'
-    when 4
-      return 'From a Flyer'
-    when 5
-      return 'Linkedin'
-    when 100
-      return 'Other'
-    end
+      return 'Unknown'
   end
 
 

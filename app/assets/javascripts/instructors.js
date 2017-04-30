@@ -1,6 +1,7 @@
 $(document).ready(function(){
     applyFormListener();
     selectAllLevelsListener();
+    selectAllLocationsListener();
     console.log("listening for form changes");
 });
 
@@ -45,6 +46,32 @@ var applyFormListener = function() {
        });
     } else {
       $('.snowboard-checkbox').each(function() {
+           this.checked = false;
+       });
+    }
+    });
+  }
+
+    var selectAllLocationsListener = function() {
+    $('#selectAllPrimaryLocations').click(function() {
+    if (this.checked) {
+       $('.primary-location-checkbox').each(function() {
+           this.checked = true;
+       });
+    } else {
+      $('.primary-location-checkbox').each(function() {
+           this.checked = false;
+       });
+    }
+    });
+
+    $('#selectAllLocations').click(function() {
+    if (this.checked) {
+       $('.location-checkbox').each(function() {
+           this.checked = true;
+       });
+    } else {
+      $('.location-checkbox').each(function() {
            this.checked = false;
        });
     }

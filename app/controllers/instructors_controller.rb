@@ -5,6 +5,17 @@ class InstructorsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:new, :create, :thank_you, :browse, :show, :show_candidate]
 
 
+  def import
+   Instructor.import(params[:file])
+   redirect_to instructors_path, notice: "New instructors data successfully imported."
+  end
+
+  def delete_all
+    Instructor.delete_all
+    redirect_to instructors_path, notice: "All instructors have been deleted."
+  end
+
+
   def verify
     instructor = Instructor.find(params[:id])
     instructor.status = 'Active'
@@ -139,6 +150,6 @@ class InstructorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def instructor_params
-      params.require(:instructor).permit(:first_name, :last_name, :username, :preferred_locations, :certification, :phone_number, :sport, :bio, :intro, :status, :city, :user_id, :avatar, :how_did_you_hear, :confirmed_certification, :kids_eligibility, :seniors_eligibility, :adults_eligibility, :kids_initial_rank, :adults_initial_rank, :overall_initial_rank, :age, :dob, sport_ids:[], location_ids:[], primary_location_ids:[], ski_level_ids:[], snowboard_level_ids:[])
+      params.require(:instructor).permit(:first_name, :last_name, :username, :home_resort_location, :contact_email, :performance_ranking, :certification, :phone_number, :bio, :intro, :status, :city, :user_id, :avatar, :confirmed_certification, :overall_initial_rank, :age, :dob, sport_ids:[], location_ids:[], primary_location_ids:[], ski_level_ids:[], snowboard_level_ids:[])
     end
 end

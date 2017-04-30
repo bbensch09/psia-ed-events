@@ -99,18 +99,20 @@
   <!-- <h4> Preferred Resorts (select up to 4)</h4> -->
   <div class="col-md-12">
   <h4> <b> Primary resort - where do you typically teach during the season?</b> </h4>
+    <input type="checkbox" id="selectAllPrimaryLocations" value="selectAll"> Select / De-select All<br/><br/>
       <%= f.collection_check_boxes :location_ids, Location.all, :id, :name do |location_item| %>
       <div class="collection-check-box">
-        <%= location_item.check_box %>
+        <%= location_item.check_box(class: 'primary-location-checkbox')  %>
         <%= location_item.label %>
       </div>
       <% end %>
   </div>
   <div class="col-md-12">
   <h4> <b> Preferred resorts - what other resorts are you happy to teach at?</b> </h4>
+    <input type="checkbox" id="selectAllLocations" value="selectAll"> Select / De-select All<br/><br/>
       <%= f.collection_check_boxes :primary_location_ids, PrimaryLocation.all, :id, :name do |location_item| %>
       <div class="collection-check-box">
-        <%= location_item.check_box %>
+        <%= location_item.check_box(class: 'location-checkbox')  %>
         <%= location_item.label %>
       </div>
       <% end %>
@@ -124,10 +126,6 @@
   <div class="col-md-12">
     <%= f.text_area :intro, rows:5, placeholder: 'Describe your background in a few sentences', class: 'form-control', required:true %>
     <br>
-  </div>
-  <h4><b>How</b> did you first hear about Snow Schoolers?</h4>
-  <div class="col-md-6">
-    <%= f.select :how_did_you_hear, [['From a Friend',1],['Facebook',2],['Google',3],['From a Flyer',4],['Linkedin',5],['Other',100]], {}, {class: 'form-control', required:true, include_blank:false} %>
   </div>
   <%= hidden_field_tag 'ga_client_id', '', :class => 'ga-client-id' %>
   <div class="row">
