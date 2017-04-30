@@ -1,0 +1,1 @@
+json.partial! "primary_locations/primary_location", primary_location: @primary_location

@@ -1,0 +1,1 @@
+json.array! @primary_locations, partial: 'primary_locations/primary_location', as: :primary_location

@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  resources :primary_locations do 
+            collection {post :import}
+  end
   resources :events
   resources :product_calendars
   resources :selfies
