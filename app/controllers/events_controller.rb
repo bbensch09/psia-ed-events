@@ -13,6 +13,16 @@ class EventsController < ApplicationController
     end
   end
 
+  def import
+   Event.import(params[:file])
+   redirect_to events_path, notice: "New events data successfully imported."
+  end
+
+  def delete_all
+    Event.delete_all
+    redirect_to events_path, notice: "All events have been deleted."
+  end
+
   # GET /events/1
   # GET /events/1.json
   def show
@@ -75,7 +85,7 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:start_time, :end_time, :name, :status, :instructor_id)
+      params.require(:event).permit(:start_time, :end_time, :name, :instructor_status, :instructor_id, :category, :length_in_days, :sport_id, :location_id, :capacity, :event_id)
     end
 
     def set_week_start_monday

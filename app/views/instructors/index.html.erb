@@ -39,6 +39,7 @@
       <th>Admin Actions</th>
       <th>Status?</th>
       <th>Discipline(s)</th>
+      <th>City</th>
       <th>Home resort</th>
       <th>Eligible locations</th>
       <th>Ski Level</th>
@@ -70,9 +71,14 @@
             <span><%= Sport.find(sport_id).name %></span> <br>
             <% end %> 
           </td>
+          <% else %>
+          <td></td>
         <% end %>
+        <td><%= instructor.city %></td>
         <% if instructor.primary_location_ids.count > 0 %>
         <td><%= Location.find(instructor.primary_location_ids.first).name %> </td>
+        <% else %>
+        <td></td>
         <% end %>
         <td><%= instructor.location_ids %> </td>
         <%if instructor.ski_levels.any? %>
@@ -85,7 +91,7 @@
           <%else%>
           <td>N/A</td>
         <%end%>
-        <td><%= instructor.overall_initial_rank %></td>
+        <td><%= instructor.performance_ranking %></td>
       </tr>
     <% end %>
   </tbody>

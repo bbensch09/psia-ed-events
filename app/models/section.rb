@@ -1,8 +1,7 @@
 class Section < ApplicationRecord
-	has_many :lessons
+	belongs_to :event
 	belongs_to :sport
 	belongs_to :instructor
-	belongs_to :shift
 	# validate :no_double_booking_instructors, on: :update
 
 	# def name

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170430222141) do
+ActiveRecord::Schema.define(version: 20170501010158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,9 +116,13 @@ ActiveRecord::Schema.define(version: 20170430222141) do
     t.datetime "end_time"
     t.string   "name"
     t.string   "status"
-    t.integer  "instructor_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "category"
+    t.integer  "length_in_days"
+    t.integer  "sport_id"
+    t.integer  "location_id"
+    t.integer  "capacity"
   end
 
   create_table "instructors", force: :cascade do |t|
@@ -338,18 +342,15 @@ ActiveRecord::Schema.define(version: 20170430222141) do
   end
 
   create_table "sections", force: :cascade do |t|
-    t.string   "age_group"
-    t.string   "lesson_type"
     t.integer  "sport_id"
     t.string   "instructor_id"
-    t.string   "status"
-    t.string   "level"
     t.integer  "capacity"
     t.date     "date"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.string   "name"
-    t.integer  "shift_id"
+    t.integer  "event_id"
+    t.string   "instructor_status"
   end
 
   create_table "selfies", force: :cascade do |t|

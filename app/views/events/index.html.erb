@@ -1,5 +1,18 @@
 <p id="notice"><%= notice %></p>
 
+<%if current_user && current_user.user_type == "Ski Area Partner" || (current_user.email == "brian@snowschoolers.com") %>
+
+<%= form_tag import_events_path, multipart: true do %>
+<h2>
+  <%= file_field_tag :file, class: 'form-control' %> <%= submit_tag "Import events from CSV", class: 'btn btn-default' %>
+<% end %> | 
+  <%= link_to "Export CSV", events_path(format: "csv"), class: 'btn btn-primary' %> |  <%= link_to 'Delete all Staff', delete_all_events_path, method: :delete_all, data: { confirm: 'Are you sure?' },  class: 'btn btn-danger' %>
+</h2>
+<hr class="deposit-hr-navy">
+
+<% end %>
+
+
 <h1 class="center">Scheduled PSIA - W events</h1>
 
 <h4 class="center">
@@ -22,7 +35,7 @@
     <% end %>
     <% events.sort_by{| event | event.status }.to_a.each do | event | %>
       <div class="<%= event.event_status_color %> instructor-event">
-        <%= link_to event.instructor.name, edit_event_path(event) %> - <span class="smaller-text"><%= event.status %></span>
+        <%= link_to event.name, edit_event_path(event) %> - <span class="smaller-text"><%= event.status %></span>
       </div>
     <% end %>
     </div>
@@ -32,7 +45,7 @@
 
 <hr>
 
-<table class="hidden">
+<table class="instructors-table">
   <thead>
     <tr>
       <th>Start time</th>
@@ -51,7 +64,7 @@
         <td><%= event.end_time.strftime("%m/%d") %></td>
         <td><%= event.name %></td>
         <td><%= event.status %></td>
-        <td><%= event.instructor.name %></td>
+        <td><%= event.category %></td>
         <td><%= link_to 'Show', event %></td>
         <td><%= link_to 'Edit', edit_event_path(event) %></td>
         <td><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></td>

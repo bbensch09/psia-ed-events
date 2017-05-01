@@ -35,6 +35,18 @@ class Instructor < ActiveRecord::Base
     end
   end
 
+  def self.assign_locations_and_levels
+    Instructor.all.each do |instructor|
+      instructor.sport_ids = (1..5).to_a.sample
+      instructor.location_ids = [14, 26, 21]
+      instructor.primary_location_ids = [14,26,21,22,24,8,7,19,27,23,18,20,25,1,5,28,11].sample
+      instructor.ski_level_ids = (1..7).to_a.sample
+      instructor.snowboard_level_ids = (1..7).to_a.sample
+      instructor.performance_ranking = (50..99).to_a.sample
+      instructor.city = ['Tahoe City','Truckee','Reno','Mammoth','Los Angeles','Truckee','Kings Beach','Tahoe City','Homewood','South Lake Tahoe','Meyers','Incline Village','Kirkwood'].sample
+      instructor.save
+    end
+  end
 
 
 

@@ -1,6 +1,27 @@
+require 'csv'
+
 class Event < ApplicationRecord
 	  belongs_to :instructor
 	  has_one :section
+
+  def self.import(file)
+    CSV.foreach(file.path, headers:true) do |row|
+        event = Event.find_or_create_by(id: row['id'])
+        event.update_attributes(row.to_hash)      
+    end
+  end
+
+  def self.to_csv(options = {})
+    desired_columns = %w{ id name
+    }
+    CSV.generate(headers: true) do |csv|
+      csv << desired_columns
+      all.each do |event|
+        csv << event.attributes.values_at(*desired_columns)
+      end
+    end
+  end
+
 
   def self.create_instructor_events(date)
   	Instructor.all.to_a.each do |instructor|

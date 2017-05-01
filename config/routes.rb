@@ -4,7 +4,10 @@ Rails.application.routes.draw do
             collection {post :import}
             collection {post :delete_all}
   end
-  resources :events
+  resources :events do 
+    collection {post :import}
+    collection {post :delete_all}
+  end
   resources :product_calendars
   resources :selfies
   resources :contestants
