@@ -34,11 +34,12 @@ class InstructorsController < ApplicationController
   # GET /instructors
   # GET /instructors.json
   def index
-    # if current_user.user_type == "Partner"
-    #   @instructors = Location.find(current_user.location_id).instructors.sort {|a,b| b.overall_initial_rank <=> a.overall_initial_rank}
-    #   else
-      @instructors = Instructor.all.sort {|a,b| b.status <=> a.status}
-    # end
+      @instructors = Instructor.all#.sort {|a,b| b.primary_location_ids <=> a.primary_location_ids}
+      respond_to do |format|
+          format.html
+          format.csv { send_data @instructors.to_csv, filename: "instructors-PSIA-#{Date.today}.csv" }
+          format.xls
+        end
   end
 
   def admin_index

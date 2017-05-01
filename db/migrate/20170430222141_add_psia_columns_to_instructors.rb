@@ -8,7 +8,7 @@ class AddPsiaColumnsToInstructors < ActiveRecord::Migration[5.0]
   	remove_column :instructors, :kids_eligibility, :boolean
   	remove_column :instructors, :seniors_eligibility, :boolean
   	remove_column :instructors, :adults_eligibility, :boolean
-  	remove_column :instructors, :preferred_locations, :string
+  	# remove_column :instructors, :preferred_locations, :string
   	add_column :instructors, :home_resort_location, :integer
   end
 end

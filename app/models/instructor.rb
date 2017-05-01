@@ -11,7 +11,7 @@ class Instructor < ActiveRecord::Base
   has_many :calendar_blocks
   has_many :sections
   after_create :send_admin_notification
-  validates :username, :first_name, :last_name, :certification, :intro, presence: true
+  validates  :first_name, :last_name, presence: true
   has_attached_file :avatar, styles: { large: "400x400>", thumb: "80x80>" },  default_url: "https://s3.amazonaws.com/snowschoolers/cd-sillouhete.jpg",
         :storage => :s3,
         :bucket => 'snowschoolers'
@@ -29,8 +29,8 @@ class Instructor < ActiveRecord::Base
     }
     CSV.generate(headers: true) do |csv|
       csv << desired_columns
-      all.each do |location|
-        csv << location.attributes.values_at(*desired_columns)
+      all.each do |instructor|
+        csv << instructor.attributes.values_at(*desired_columns)
       end
     end
   end

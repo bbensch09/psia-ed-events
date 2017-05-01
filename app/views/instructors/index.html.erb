@@ -65,8 +65,15 @@
         <td><%= link_to 'Revoke', revoke_instructor_path(instructor), method: :post, class: 'btn btn-danger' %></td>
         <% end %>
         <td>Currently <%= instructor.status %></td>
-        <td><%= instructor.sport_ids %></td>
-        <td><%= instructor.primary_location_ids %> </td>
+        <% if instructor.sport_ids.count > 0 %>
+          <td><% instructor.sport_ids.each do |sport_id| %>
+            <span><%= Sport.find(sport_id).name %></span> <br>
+            <% end %> 
+          </td>
+        <% end %>
+        <% if instructor.primary_location_ids.count > 0 %>
+        <td><%= Location.find(instructor.primary_location_ids.first).name %> </td>
+        <% end %>
         <td><%= instructor.location_ids %> </td>
         <%if instructor.ski_levels.any? %>
         <td><%= instructor.ski_levels.max.value %></td>

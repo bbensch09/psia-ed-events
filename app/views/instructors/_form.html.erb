@@ -53,14 +53,15 @@
         <%= f.label :avatar %><br>
         <%= f.file_field :avatar, class: 'form-control' %>
       </div>
-  <h4>Please provide your age and a short bio to introduce yourself to prospective clients.</h4>
+  <!-- <h4>Please provide your age and a short bio to introduce yourself to prospective clients.</h4>
   <div class="col-md-12">
       <%= f.text_field :age, placeholder: 'age', class: 'form-control', required:true %>
       <br>
       <%= f.text_area :bio, rows:5, placeholder: 'Describe your background in a few sentences', class: 'form-control', required:true %>
     <br>
   </div>
-    <% end %>
+   -->  
+   <% end %>
     <h4><b>Contact Info</b> </h4>
     <div class="col-md-6 vertical-padding">
       <%= f.text_field :first_name, placeholder: 'First name', class: 'form-control', required:true %>
@@ -100,7 +101,7 @@
   <div class="col-md-12">
   <h4> <b> Primary resort - where do you typically teach during the season?</b> </h4>
     <input type="checkbox" id="selectAllPrimaryLocations" value="selectAll"> Select / De-select All<br/><br/>
-      <%= f.collection_check_boxes :location_ids, Location.all, :id, :name do |location_item| %>
+      <%= f.collection_check_boxes :primary_location_ids, Location.all, :id, :name do |location_item| %>
       <div class="collection-check-box">
         <%= location_item.check_box(class: 'primary-location-checkbox')  %>
         <%= location_item.label %>
@@ -110,14 +111,14 @@
   <div class="col-md-12">
   <h4> <b> Preferred resorts - what other resorts are you happy to teach at?</b> </h4>
     <input type="checkbox" id="selectAllLocations" value="selectAll"> Select / De-select All<br/><br/>
-      <%= f.collection_check_boxes :primary_location_ids, PrimaryLocation.all, :id, :name do |location_item| %>
+      <%= f.collection_check_boxes :location_ids, PrimaryLocation.all, :id, :name do |location_item| %>
       <div class="collection-check-box">
         <%= location_item.check_box(class: 'location-checkbox')  %>
         <%= location_item.label %>
       </div>
       <% end %>
   </div>
-  <h4><b>Professional certifications</b> (PSIA, AASI, etc.) </h4>
+  <!-- <h4><b>Professional certifications</b> (PSIA, AASI, etc.) </h4>
   <div class="col-md-12">
     <%= f.text_field :certification, placeholder: 'Do you hold any certifications?', class: 'form-control', required:true %>
     <br>
@@ -127,7 +128,8 @@
     <%= f.text_area :intro, rows:5, placeholder: 'Describe your background in a few sentences', class: 'form-control', required:true %>
     <br>
   </div>
-  <%= hidden_field_tag 'ga_client_id', '', :class => 'ga-client-id' %>
+ -->  
+ <%= hidden_field_tag 'ga_client_id', '', :class => 'ga-client-id' %>
   <div class="row">
     <div class="col-md-12 vertical-padding">
       <% if controller.action_name == 'edit' %>
