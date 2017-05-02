@@ -1,19 +1,32 @@
 <p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Start time:</strong>
-  <%= @event.start_time %>
-</p>
-
-<p>
-  <strong>End time:</strong>
-  <%= @event.end_time %>
-</p>
+<div class="container">
 
 <p>
   <strong>Name:</strong>
   <%= @event.name %>
 </p>
+<p>
+  <strong>Category:</strong>
+  <%= @event.category %>
+</p>
+<p>
+  <strong>Location:</strong>
+  <%= @event.location.name %>
+</p>
+<p>
+  <strong>Discipline:</strong>
+  <%= @event.sport.name %>
+</p>
+<p>
+  <strong>Start time:</strong>
+  <%= @event.start_time.strftime("%m/%d @%l%P") %>
+</p>
+
+<p>
+  <strong>End time:</strong>
+  <%= @event.end_time.strftime("%m/%d @%l%P") %>
+</p>
+
 
 <p>
   <strong>Status:</strong>
@@ -21,9 +34,10 @@
 </p>
 
 <p>
-  <strong>Instructor:</strong>
-  <%= @event.instructor_id %>
+  <strong>Sections:</strong>
+  <%= @event.sections.count %>
 </p>
 
 <%= link_to 'Edit', edit_event_path(@event) %> |
 <%= link_to 'Back', events_path %>
+</div>

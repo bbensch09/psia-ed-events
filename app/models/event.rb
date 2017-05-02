@@ -2,7 +2,9 @@ require 'csv'
 
 class Event < ApplicationRecord
 	  belongs_to :instructor
-	  has_one :section
+	  has_many :sections
+    belongs_to :sport
+    belongs_to :location
 
   def self.import(file)
     CSV.foreach(file.path, headers:true) do |row|
@@ -12,8 +14,9 @@ class Event < ApplicationRecord
   end
 
   def self.to_csv(options = {})
-    desired_columns = %w{ id name
+    desired_columns = %w{ id name category start_time end_time status length_in_days sport_id location_id capacity
     }
+
     CSV.generate(headers: true) do |csv|
       csv << desired_columns
       all.each do |event|
@@ -54,8 +57,8 @@ class Event < ApplicationRecord
   end
 
   def self.capacity(date)
-  	total_students = Lesson.bookings_for_date(date)
-  	scheduled_instructors = Event.all.to_a.keep_if { |event| event.start_time.to_date == date && event.status == "Scheduled"}
+    total_students = Lesson.bookings_for_date(date)
+  	scheduled_instructors = Event.all.to_a.keep_if { |event| event.start_time && event.start_time.to_date == date && event.status == "Scheduled"}
   	# return scheduled_instructors.count
   	avg_capcity_per_instructor = 6
   	return total_capacity = avg_capcity_per_instructor * scheduled_instructors.count

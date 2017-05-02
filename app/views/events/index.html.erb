@@ -1,4 +1,5 @@
 <p id="notice"><%= notice %></p>
+<div class="container">
 
 <%if current_user && current_user.user_type == "Ski Area Partner" || (current_user.email == "brian@snowschoolers.com") %>
 
@@ -20,7 +21,7 @@
 </h4>
 
 <div class="calendar-container">
-  <%= week_calendar(events: @events) do |date, events| %>
+  <%= month_calendar(events: @events) do |date, events| %>
     <% if events.count > 0 %>
     <div class="day-within-week">
       <div class="daily-summary">
@@ -51,8 +52,12 @@
       <th>Start time</th>
       <th>End time</th>
       <th>Name</th>
+      <th>Category</th>
+      <th>Sport</th>
+      <th>Location</th>
+      <th>#Sections</th>
+      <th>Instructors</th>
       <th>Status</th>
-      <th>Instructor</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -60,11 +65,21 @@
   <tbody>
     <% @events.each do |event| %>
       <tr>
+        <% if event.start_time %>
         <td><%= event.start_time.strftime("%m/%d") %></td>
+        <!-- <td><%= event.start_time.strftime("%m/%d @%l%P") %></td> -->
         <td><%= event.end_time.strftime("%m/%d") %></td>
+        <% else %>
+        <td></td>
+        <td></td>
+        <% end %>
         <td><%= event.name %></td>
-        <td><%= event.status %></td>
         <td><%= event.category %></td>
+        <td><%= event.sport.name %></td>
+        <td><%= event.location ? event.location.name : "TBD" %></td>
+        <td><%= event.sections.count %></td>
+        <td>TBD</td>
+        <td><%= event.status %></td>
         <td><%= link_to 'Show', event %></td>
         <td><%= link_to 'Edit', edit_event_path(event) %></td>
         <td><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -75,3 +90,4 @@
 
 <br>
 
+</div>

@@ -6,10 +6,17 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    if params[:start_date]
-      @events = Event.all.to_a.keep_if{|event| (event.start_time.to_date - params[:start_date].to_date) <=6 }
-    else
-      @events = Event.all.to_a.keep_if{|event| (event.start_time.to_date - Date.today) <=14 }
+    # if params[:start_date]
+    #   @events = Event.all.to_a.keep_if{|event| (event.start_time.to_date - params[:start_date].to_date) <=6 }
+    # else
+    #   @events = Event.all.to_a.keep_if{|event| (event.start_time.to_date - Date.today) <=14 }
+    # end
+    @events = Event.all.sort_by { |event| event.start_time}
+    @events_to_csv = Event.all
+    respond_to do |format|
+          format.html
+          format.csv { send_data @events_to_csv.to_csv, filename: "events-#{Date.today}.csv" }
+          format.xls
     end
   end
 
