@@ -41,23 +41,23 @@
   Telemark <img src= "/assets/telemark-icon.png" class="tele-icon">
   <% end %></p>
 
+
 <p>
-  <strong>Resorts Preferences:</strong>
+  <strong>Preferred Resorts:</strong>
   <ul>
-    <% @instructor.locations.each do |location| %>
+    <% @instructor.primary_locations.each do |location| %>
     <li> <%= location.name %> </li>
     <% end %>
   </ul>
 </p>
 
 <p>
-  <strong>Intro:</strong>
-  <%= @instructor.intro %>
-</p>
-
-<p>
-  <strong>Preferred Resorts:</strong>
-  <%= @instructor.primary_locations %>
+  <strong>Eligible (secondary) Resorts:</strong>
+  <ul>
+    <% @instructor.locations.each do |location| %>
+    <li> <%= location.name %> </li>
+    <% end %>
+  </ul>
 </p>
 
 <p>

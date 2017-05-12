@@ -20,7 +20,7 @@
   <%= link_to 'New event', new_event_path, class: 'btn btn-success' %>
 </h4>
 
-<div class="calendar-container">
+<div class="calendar-container hidden">
   <%= month_calendar(events: @events) do |date, events| %>
     <% if events.count > 0 %>
     <div class="day-within-week">
