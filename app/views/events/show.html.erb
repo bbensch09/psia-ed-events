@@ -14,6 +14,15 @@
   <%= @event.location.name %>
 </p>
 <p>
+  <strong>Primary Instructors:</strong>
+  <ul>
+    <% @event.available_instructors.each do |instructor| %>
+    <li><%= instructor.name %> - <%= instructor.performance_ranking %> </li>
+  <% end %>
+  </ul>
+</p>
+
+<p>
   <strong>Discipline:</strong>
   <%= @event.sport.name %>
 </p>

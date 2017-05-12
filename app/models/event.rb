@@ -6,6 +6,12 @@ class Event < ApplicationRecord
     belongs_to :sport
     belongs_to :location
 
+  def available_instructors
+    all_instructors = self.location.instructors
+    ranked_instructors = all_instructors.to_a.sort! {|a,b| b.performance_ranking <=> a.performance_ranking }
+    ranked_instructors.first(5)
+  end
+
   def self.import(file)
     CSV.foreach(file.path, headers:true) do |row|
         event = Event.find_or_create_by(id: row['id'])
