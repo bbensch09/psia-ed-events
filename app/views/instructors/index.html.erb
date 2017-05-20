@@ -12,9 +12,11 @@
 
 <div class="col-md-6">
     <h4>Total Staff count: <%= Instructor.count %> </h4>
-    <h4>Active Ski Examiners: <%= (Instructor.where(sport:"Ski Instructor",status:"Active").count + Instructor.where(sport:"Both Ski & Snowboard",status:"Active").count) %> </h4>
-    <h4>Active Snowboard Examiners: <%= (Instructor.where(sport:"Snowboard Instructor", status:"Active").count + Instructor.where(sport:"Both Ski & Snowboard",status:"Active").count) %> </h4>
-    <h4>Inactive Examiners: <%= (Instructor.count - Instructor.where(status:"Active").count) %> </h4>
+    <h4>Ski Examiners: <%= Instructor.joins(:sports).where(sports: {name:"Skiing"}).count %> </h4>
+    <h4>Snowboard Examiners: <%= Instructor.joins(:sports).where(sports: {name:"Snowboarding"}).count %> </h4>
+    <h4>Telemark Examiners: <%= Instructor.joins(:sports).where(sports: {name:"Telemarking"}).count %> </h4>
+    <h4>Nordic Examiners: <%= Instructor.joins(:sports).where(sports: {name:"Nordic"}).count %> </h4>
+    <h4>Adaptive Examiners: <%= Instructor.joins(:sports).where(sports: {name:"Adaptive"}).count %> </h4>
 </div>
 <% if current_user.location %>
 <div class="col-md-6">
@@ -33,6 +35,7 @@
 <!--       <th>First</th>
       <th>Last</th> -->
       <!-- <th>ID</th> -->
+      <th>ID</th>
       <th></th>
       <th>Name</th>
       <th>Email</th>
@@ -51,7 +54,7 @@
   <tbody>
     <% @instructors.each do |instructor| %>
       <tr>
-        <!-- <td><%= instructor.id %></td> -->
+        <td><%= instructor.id %></td>
         <td> <%= link_to image_tag(instructor.avatar.url(:thumb), alt:"avatar-img", class:"img-responsive img-thumbnail avatar-thumbnail"), edit_instructor_path(instructor) %> </td>
         <td><%= link_to "#{instructor.name}", show_candidate_instructor_path(instructor) %></td>
         <!-- <td>
@@ -65,7 +68,7 @@
           <% else %>
         <td><%= link_to 'Revoke', revoke_instructor_path(instructor), method: :post, class: 'btn btn-danger' %></td>
         <% end %>
-        <td>Currently <%= instructor.status %></td>
+        <td><%= instructor.status %></td>
         <% if instructor.sport_ids.count > 0 %>
           <td><% instructor.sport_ids.each do |sport_id| %>
             <span><%= Sport.find(sport_id).name %></span> <br>
@@ -80,7 +83,13 @@
         <% else %>
         <td></td>
         <% end %>
-        <td><%= instructor.location_ids %> </td>
+
+        <td>
+          <% instructor.locations.each do|location| %> 
+            <%= location.name %> <br>
+          <% end %>
+        </td>
+        
         <%if instructor.ski_levels.any? %>
         <td><%= instructor.ski_levels.max.value %></td>
           <%else%>

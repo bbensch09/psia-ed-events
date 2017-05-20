@@ -128,10 +128,8 @@ ActiveRecord::Schema.define(version: 20170501010158) do
   create_table "instructors", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "username"
     t.string   "certification"
     t.string   "phone_number"
-    t.string   "sport"
     t.text     "bio"
     t.text     "intro"
     t.string   "status"

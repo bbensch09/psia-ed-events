@@ -1,22 +1,23 @@
 
-resorts = [      
-      "Homewood",
-      "Jackson Hole",
-      "Mt. Rose",
-      "Soda Springs",
-      "Snowbasin",
-      "Snowbird",
-      "Squaw Valley",
-      "Sun Valley",
-      "Sugar Bowl",
-      "Tahoe Donner",
-      "Taos"
-      ]
-resorts.each do |resort|
-  Location.create!({
-  name: resort
-  })
-end
+# resorts = [      
+#       "Homewood",
+#       "Jackson Hole",
+#       "Mt. Rose",
+#       "Soda Springs",
+#       "Snowbasin",
+#       "Snowbird",
+#       "Squaw Valley",
+#       "Sun Valley",
+#       "Sugar Bowl",
+#       "Tahoe Donner",
+#       "Taos"
+#       ]
+
+# resorts.each do |resort|
+#   Location.create!({
+#   name: resort
+#   })
+# end
 
 
 =begin
@@ -304,11 +305,13 @@ puts "seed complete, locations created."
 #               "Level 8 - safely navigates moguls and off-piste terrain.",
 #               "Level 9 - confidently and safely skis expert-only (double-black diamond) terrain."]
 
-Sport.create!({name: "Ski Instructor"})
-Sport.create!({name: "Telemark Instructor"})
-Sport.create!({name: "Snowboard Instructor"})
+Sport.create!({name: "Skiing"})
+Sport.create!({name: "Snowboarding"})
+Sport.create!({name: "Telemarking"})
+Sport.create!({name: "Nordic"})
+Sport.create!({name: "Adaptive"})
 
-ski_levels = ["Trainer - Level 1",
+levels = ["Trainer - Level 1",
               "Trainer - Level 2",
               "Trainer - Level 3",
               "Examiner - Level 1",
@@ -317,7 +320,7 @@ ski_levels = ["Trainer - Level 1",
               "Examiner - Ed Staff"
               ]
 
-ski_levels.each do |level|
+levels.each do |level|
   SkiLevel.create!({
   name: level,
   value: SkiLevel.count + 1
@@ -328,7 +331,7 @@ ski_levels.each do |level|
   value: SnowboardLevel.count + 1
   })
 end
-puts "Ski and snowboard level 1-9 created."
+puts "Ski and snowboard examiner levels created."
 
 
 #BEGIN seed file to setup for Demo

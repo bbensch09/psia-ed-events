@@ -1,5 +1,5 @@
 class Sport < ApplicationRecord
-  has_and_belongs_to_many :instructors
+  has_and_belongs_to_many :instructors, dependent: :destroy
   belongs_to :event
 
   def activity_name

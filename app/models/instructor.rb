@@ -1,12 +1,12 @@
 class Instructor < ActiveRecord::Base
   belongs_to :user
-  has_and_belongs_to_many :locations
-  has_and_belongs_to_many :primary_locations
-  has_and_belongs_to_many :ski_levels
-  has_and_belongs_to_many :snowboard_levels
+  has_and_belongs_to_many :locations, dependent: :destroy
+  has_and_belongs_to_many :primary_locations, dependent: :destroy
+  has_and_belongs_to_many :ski_levels, dependent: :destroy
+  has_and_belongs_to_many :snowboard_levels, dependent: :destroy
   has_many :lesson_actions
   has_many :lessons
-  has_and_belongs_to_many :sports
+  has_and_belongs_to_many :sports, dependent: :destroy
   has_many :reviews
   has_many :calendar_blocks
   has_many :sections
@@ -20,7 +20,17 @@ class Instructor < ActiveRecord::Base
   def self.import(file)
     CSV.foreach(file.path, headers:true) do |row|
         instructor = Instructor.find_or_create_by(id: row['id'])
-        instructor.update_attributes(row.to_hash)      
+        instructor.first_name = row["first_name"]
+        instructor.last_name = row["last_name"]
+        instructor.contact_email = row["contact_email"]
+        instructor.update_attributes(sport_ids: row["sport_ids"].split(",").map{|i| i.to_i })
+        instructor.update_attributes(primary_location_ids: row["primary_location_ids"].split(",").map{|i| i.to_i })
+        instructor.update_attributes(location_ids: row["location_ids"].split(",").map{|i| i.to_i })
+        instructor.update_attributes(ski_level_ids: row["ski_level_ids"].to_i)
+        instructor.update_attributes(snowboard_level_ids: row["snowboard_level_ids"].to_i)
+        instructor.status = row["status"]
+        instructor.performance_ranking = row["performance_ranking"]
+        instructor.save!
     end
   end
 
@@ -104,15 +114,31 @@ class Instructor < ActiveRecord::Base
   end
 
   def ski_instructor?
-    return true if self.sports.include?(Sport.where(name:"Ski Instructor").first)
+    return true if self.sports.include?(Sport.where(name:"Skiing").first)
   end
 
   def snowboard_instructor?
-    return true if self.sports.include?(Sport.where(name:"Snowboard Instructor").first)
+    return true if self.sports.include?(Sport.where(name:"Snowboarding").first)
   end
 
   def telemark_instructor?
-    return true if self.sports.include?(Sport.where(name:"Telemark Instructor").first)
+    return true if self.sports.include?(Sport.where(name:"Telemarking").first)
+  end
+
+  def nordic_instructor?
+    return true if self.sports.include?(Sport.where(name:"Nordic").first)
+  end
+
+  def adaptive_instructor?
+    return true if self.sports.include?(Sport.where(name:"Adaptive").first)
+  end
+
+  def list_sports
+    sports = []
+    self.sports.each do |sport|
+      sports << sport.name
+    end
+    sports.join(", ")
   end
 
   def average_rating

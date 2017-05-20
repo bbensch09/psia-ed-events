@@ -24,7 +24,11 @@
     <div class="col-md-4">
     <%= f.input :status, as: :select, collection: ['New Event', 'Scheduling Staff','Scheduled'], include_blank: 'Status'  %>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-6">
+      <%= f.input :capacity, placeholder: 'Capacity', required:true  %>
+    </div>
+  
+    <div class="col-md-6">
       <%= f.input :location_id, as: :select, collection: Location.all.sort_by{|location| location.name}, include_blank: "Event Location" %>
     </div>
 

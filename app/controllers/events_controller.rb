@@ -27,6 +27,7 @@ class EventsController < ApplicationController
 
   def delete_all
     Event.delete_all
+    Section.delete_all
     redirect_to events_path, notice: "All events have been deleted."
   end
 

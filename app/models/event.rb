@@ -8,6 +8,9 @@ class Event < ApplicationRecord
 
   def available_instructors
     all_instructors = self.location.instructors
+    all_instructors = all_instructors.to_a.keep_if {|instructor| instructor.sports.include?(self.sport)}
+    #filter instructors that are already busy on that day
+    #rank instructors for whom the location is their home resort first
     ranked_instructors = all_instructors.to_a.sort! {|a,b| b.performance_ranking <=> a.performance_ranking }
     ranked_instructors.first(5)
   end
@@ -15,7 +18,23 @@ class Event < ApplicationRecord
   def self.import(file)
     CSV.foreach(file.path, headers:true) do |row|
         event = Event.find_or_create_by(id: row['id'])
-        event.update_attributes(row.to_hash)      
+        event.update_attributes(row.to_hash)
+        event.create_sections_based_on_capacity      
+    end
+  end
+
+  def create_sections_based_on_capacity
+    puts id = self.id
+    event = Event.find(self.id)
+    sections_needed = (event.capacity / 10.to_f).ceil
+    sections_needed.times do 
+      Section.create!({
+            sport_id: event.sport_id,
+            instructor_id: nil,
+            capacity: 10,
+            event_id: event.id,
+            instructor_status: "unassigned"
+        })
     end
   end
 

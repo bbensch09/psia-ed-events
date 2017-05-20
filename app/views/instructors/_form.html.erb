@@ -19,7 +19,7 @@
     <div class="col-md-12 vertical-padding">
     <h4> Link to user_id: </h4>
       <%= f.select :user_id, options_from_collection_for_select(User.all.sort {|a,b| a.username_for_admin <=> b.username_for_admin}, :id, :username_for_admin, selected:@instructor_id), include_blank:true %>
-    <h4>Initial Overral Rank</h4>
+    <h4>Performance Rank</h4>
       <%= f.text_field :performance_ranking, include_blank:false %>
     </div>
   <div class="col-md-12">
@@ -73,7 +73,7 @@
   <div class="">
     <div class="col-md-6 vertical-padding">
       <% if current_user %>
-      <%= f.text_field :username, value: current_user.email, class: 'form-control', required:true %>
+      <%= f.text_field :contact_email, value: current_user.email, class: 'form-control', required:true %>
         <% else %>
               <%= f.text_field :username, placeholder: "email@example.com", class: 'form-control', required:true %>
       <% end %>

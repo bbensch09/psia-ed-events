@@ -34,7 +34,7 @@ class InstructorsController < ApplicationController
   # GET /instructors
   # GET /instructors.json
   def index
-      @instructors = Instructor.all#.sort {|a,b| b.primary_location_ids <=> a.primary_location_ids}
+      @instructors = Instructor.all.sort {|a,b| a.id <=> b.id}
       respond_to do |format|
           format.html
           format.csv { send_data @instructors.to_csv, filename: "instructors-PSIA-#{Date.today}.csv" }
@@ -89,11 +89,8 @@ class InstructorsController < ApplicationController
   def create
     @instructor = Instructor.new(instructor_params)
     @instructor.user_id = current_user.id unless current_user.nil?
-    @instructor.status = "new applicant"
-    @instructor.overall_initial_rank = 1
-    @instructor.kids_initial_rank = 1
-    @instructor.adults_initial_rank = 1
-
+    @instructor.status = "Active"
+    
     respond_to do |format|
       if @instructor.save
         # ga_test_cid = params[:ga_client_id]
@@ -151,6 +148,6 @@ class InstructorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def instructor_params
-      params.require(:instructor).permit(:first_name, :last_name, :username, :home_resort_location, :contact_email, :performance_ranking, :certification, :phone_number, :bio, :intro, :status, :city, :user_id, :avatar, :confirmed_certification, :overall_initial_rank, :age, :dob, sport_ids:[], location_ids:[], primary_location_ids:[], ski_level_ids:[], snowboard_level_ids:[])
+      params.require(:instructor).permit(:first_name, :last_name, :home_resort_location, :contact_email, :performance_ranking, :certification, :phone_number, :bio, :intro, :status, :city, :user_id, :avatar, :confirmed_certification, :age, :dob, sport_ids:[], location_ids:[], primary_location_ids:[], ski_level_ids:[], snowboard_level_ids:[])
     end
 end

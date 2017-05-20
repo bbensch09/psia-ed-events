@@ -14,10 +14,10 @@
   <%= @event.location.name %>
 </p>
 <p>
-  <strong>Primary Instructors:</strong>
+  <strong>Available Instructors:</strong>
   <ul>
     <% @event.available_instructors.each do |instructor| %>
-    <li><%= instructor.name %> - <%= instructor.performance_ranking %> </li>
+    <li><%= instructor.name %> - <%= instructor.performance_ranking %> - <%= instructor.list_sports %> </li>
   <% end %>
   </ul>
 </p>

@@ -11,15 +11,8 @@
 
   <h1> <%= @instructor.name %>, <%= @instructor.age %> </h1>
   <h3>
-  <% if @instructor.ski_instructor? %>
-  Skiing <img src= "/assets/skier-icon.ico" class="icons">
-  <% end %>
-  <% if @instructor.snowboard_instructor? %>
-  Snowboarding <img src= "/assets/snowboarder-icon.png" class="icons">
-  <% end %>
-  <% if @instructor.telemark_instructor? %>
-  Telemark <img src= "/assets/telemark-icon.png" class="tele-icon">
-  <% end %>
+    <%= render partial: "instructor_disciplines" %>
+  </h3>
   <br>
   <div class="star-rating" data-score= <%= ((@instructor.average_rating*10).round/10.0) %> >
   Average Rating: </h3>

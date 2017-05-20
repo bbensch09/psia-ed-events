@@ -29,18 +29,7 @@
   <%= @instructor.phone_number %>
 </p>
 
-<p>
-  <strong>Sport:</strong>
-  <% if @instructor.ski_instructor? %>
-  Skiing <img src= "/assets/skier-icon.ico" class="icons">
-  <% end %>
-  <% if @instructor.snowboard_instructor? %>
-  Snowboarding <img src= "/assets/snowboarder-icon.png" class="icons">
-  <% end %>
-  <% if @instructor.telemark_instructor? %>
-  Telemark <img src= "/assets/telemark-icon.png" class="tele-icon">
-  <% end %></p>
-
+<%= render partial: "instructor_disciplines" %>
 
 <p>
   <strong>Preferred Resorts:</strong>
