@@ -1,5 +1,5 @@
 class SectionsController < ApplicationController
-  before_action :set_section, only: [:show, :edit, :update, :destroy]
+  before_action :set_section, only: [:show, :edit, :update, :destroy, :email_event_request_to_staff]
 
   def assign_instructor_to_section
     puts "the params are #{params}"
@@ -11,13 +11,35 @@ class SectionsController < ApplicationController
     redirect_to events_path   
   end
 
-  def remove_instructor_from_section
+  def unassign_instructor_from_section
     puts "the params are #{params}"
     @section = Section.find(params[:section_id])
     @section.instructor_id = nil
     @section.instructor_status = "Unassigned"    
     @section.save!
     redirect_to events_path   
+  end
+
+  def confirm_instructor
+    puts "the params are #{params}"
+    @section = Section.find(params[:section_id])
+    @section.instructor_status = "Confirmed"    
+    @section.save!
+    redirect_to review_events_path   
+  end
+
+  def cancel_instructor
+    puts "the params are #{params}"
+    @section = Section.find(params[:section_id])
+    @section.instructor_status = "Canceled"    
+    @section.instructor_id = nil
+    @section.save!
+    redirect_to review_events_path   
+  end
+
+  def email_event_request_to_staff
+    LessonMailer.email_event_request_to_staff(@section).deliver
+    redirect_to events_path, notice: "Email successfully sent to #{@section.instructor.contact_email}."
   end
 
   # GET /sections

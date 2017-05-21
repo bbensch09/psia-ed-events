@@ -6,8 +6,6 @@
         - user_id
         - first_name
         - last_name
-        - username
-        - locations
         - sports
         - primary_locations
         - locations

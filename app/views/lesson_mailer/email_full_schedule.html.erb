@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>    
+    <p>
+      Hello <%= @instructor.name %>,
+    </p>
+    <p>
+      We have been finalizing the schedule for our PSIA-West education & certification events for next season, and would love to confirm your availability to work the events below.
+    </p>
+    <div class='row'>
+      <h4><strong>Event Info</strong></h4>
+
+      <% @instructor.sections.each do |section| %>
+      <ul>
+          <li><%= section.event.name %> </li>
+          <li>Location:<%= section.event.location.name %> </li>
+          <li>Date: <%= section.event.date.strftime("%A %b #{section.event.date.day.ordinalize}, %Y") %></li>
+      </ul>
+      <% end %>
+      <p>
+        To review this event and either confirm or cancel, simply visit: <%= link_to review_events_url, review_events_url %>.
+      </p>
+    </div>
+  </body>
+</html>

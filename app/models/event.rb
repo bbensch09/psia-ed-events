@@ -10,8 +10,13 @@ class Event < ApplicationRecord
     all_instructors = self.location.instructors
     eligible_instructors = all_instructors.to_a.keep_if {|instructor| instructor.sports.include?(self.sport)}
     # filter instructors based on qualifications
-    eligible_instructors = eligible_instructors.to_a.keep_if {|instructor| instructor.ski_levels.max.value >= self.staff_level.to_i }
-
+    case self.sport.id
+      when 1
+      eligible_instructors = eligible_instructors.to_a.keep_if {|instructor| instructor.ski_instructor? && instructor.ski_levels.max.value >= self.staff_level.to_i }
+      when 2
+      eligible_instructors = eligible_instructors.to_a.keep_if {|instructor| instructor.snowboard_instructor? && instructor.snowboard_levels.max.value >= self.staff_level.to_i }
+      else    
+    end
     #filter instructors that are already busy on that day
     conflicting_sections = Section.where(date: self.date)
     busy_instructors = []
@@ -23,6 +28,28 @@ class Event < ApplicationRecord
     #rank instructors for whom the location is their home resort first
     ranked_instructors = eligible_instructors.to_a.sort! {|a,b| b.performance_ranking <=> a.performance_ranking }
     ranked_instructors.first(5)
+  end
+
+  def self.assign_all_remaining_events
+    events = Event.joins(:sections).where(sections: {instructor_id:nil})
+    events.each do |event|
+      event.sections.each do |section|
+        section.instructor_id = section.event.available_instructors.first ? section.event.available_instructors.first.id : nil
+        section.instructor_status = 'Assigned'
+        section.save!
+      end
+      event.save!
+    end
+  end
+  
+  def self.unassign_all_events
+    Event.all.each do |event|
+      event.sections.each do |section|
+        section.instructor_id = nil
+        section.instructor_status = "Unassigned"
+        section.save!
+      end
+    end
   end
 
   def self.import(file)

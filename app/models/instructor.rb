@@ -10,7 +10,7 @@ class Instructor < ActiveRecord::Base
   has_many :reviews
   has_many :calendar_blocks
   has_many :sections
-  after_create :send_admin_notification
+  # after_create :send_admin_notification
   validates  :first_name, :last_name, presence: true
   has_attached_file :avatar, styles: { large: "400x400>", thumb: "80x80>" },  default_url: "https://s3.amazonaws.com/snowschoolers/cd-sillouhete.jpg",
         :storage => :s3,
@@ -26,8 +26,12 @@ class Instructor < ActiveRecord::Base
         instructor.update_attributes(sport_ids: row["sport_ids"].split(",").map{|i| i.to_i })
         instructor.update_attributes(primary_location_ids: row["primary_location_ids"].split(",").map{|i| i.to_i })
         instructor.update_attributes(location_ids: row["location_ids"].split(",").map{|i| i.to_i })
-        instructor.update_attributes(ski_level_ids: row["ski_level_ids"].to_i)
-        instructor.update_attributes(snowboard_level_ids: row["snowboard_level_ids"].to_i)
+        if row["ski_level_ids"].to_i > 0
+          instructor.update_attributes(ski_level_ids: row["ski_level_ids"].to_i)
+        end
+        if row["snowboard_level_ids"].to_i > 0
+          instructor.update_attributes(snowboard_level_ids: row["snowboard_level_ids"].to_i)
+        end
         instructor.status = row["status"]
         instructor.performance_ranking = row["performance_ranking"]
         instructor.save!

@@ -293,7 +293,7 @@ Product.create!({
 
 =end
 
-puts "seed complete, locations created."
+# puts "seed complete, locations created."
 
 # ski_levels = ["Level 1 - first-time ever, no previous experience.",
 #               "Level 2 - safely stops on beginner green circle terrain.",
@@ -305,13 +305,26 @@ puts "seed complete, locations created."
 #               "Level 8 - safely navigates moguls and off-piste terrain.",
 #               "Level 9 - confidently and safely skis expert-only (double-black diamond) terrain."]
 
+Sport.delete_all
+SkiLevel.delete_all
+SnowboardLevel.delete_all
+
 Sport.create!({name: "Skiing"})
 Sport.create!({name: "Snowboarding"})
 Sport.create!({name: "Telemarking"})
 Sport.create!({name: "Nordic"})
 Sport.create!({name: "Adaptive"})
 
-levels = [    "Trainer - Ed Events only",
+SkiLevel.create!({
+  name: "Trainer - Ed Events only",
+  value: 1
+  })
+SnowboardLevel.create!({
+  name: "Trainer - Ed Events only",
+  value: 1
+  })
+
+levels = [    
               "Examiner - Level 1",
               "Examiner - Level 2",
               "Examiner - Level 3",
@@ -321,14 +334,16 @@ levels = [    "Trainer - Ed Events only",
 levels.each do |level|
   SkiLevel.create!({
   name: level,
-  value: SkiLevel.count + 1
+  value: SkiLevel.count
   })
 
   SnowboardLevel.create!({
   name: level,
-  value: SnowboardLevel.count + 1
+  value: SnowboardLevel.count
   })
 end
+
+
 puts "Ski and snowboard examiner levels created."
 
 

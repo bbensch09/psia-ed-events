@@ -145,7 +145,7 @@
                 <li><%= link_to 'Teach with Us', '/apply', class: 'sign-up-btn' %></li>
               <% elsif current_user.active_instructor? %>
                 <li><%= link_to name, instructor_path(current_user.instructor) %></li>
-                <li><a href="/events" class="sign-up-btn"> View Events </a></li>
+                <li><a href="/events/review" class="sign-up-btn"> Review Schedule </a></li>
                 <li><%= link_to 'Inbox', '/my_conversations', class: 'sign-up-btn' %></li>
                 <li><a href="/browse" class="sign-up-btn">Instructors</a></li>
                 <li><a href="/calendar_blocks" class="sign-up-btn"> Manage Availability </a></li>

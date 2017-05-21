@@ -1,6 +1,16 @@
 class LessonMailer < ActionMailer::Base
   default from: 'SnowSchoolers.com <info@snowschoolers.com>'
 
+  def email_event_request_to_staff(section)
+    @section = section
+    mail(to: section.instructor.contact_email, cc:'brian@snowschoolers.com', subject: "PSIA Ed Staff Scheduling Request - #{@section.name} on #{@section.date}" )
+  end
+
+  def email_full_schedule(instructor)
+    @instructor = instructor
+    mail(to: instructor.contact_email, cc:'brian@snowschoolers.com', subject: "PSIA Ed Staff Schedule Updates for #{@instructor.name} - please review" )
+  end
+
   def track_apply_visits(email="Unknown user")
       @email = email
       mail(to: 'brian@snowschoolers.com', subject: "Pageview at /apply - #{email}.")

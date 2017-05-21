@@ -3,14 +3,44 @@ class EventsController < ApplicationController
   before_action :set_week_start_monday  
   skip_before_action :authenticate_user!
 
+  def email_all_staff
+    staff_to_email = Instructor.all.to_a.keep_if{|i| i.sections.count > 0 }
+    staff_to_email.each do |instructor|
+      LessonMailer.email_full_schedule(instructor).deliver
+    end
+    redirect_to events_path, notice: "Email successfully sent to all instructors"
+  end
+
+
+  def assign_all_remaining_events
+    Event.assign_all_remaining_events
+    @events = Event.all.sort_by { |event| event.start_time}
+    render 'index'
+  end
+
+  def unassign_all_events
+    Event.unassign_all_events
+    @events = Event.all.sort_by { |event| event.start_time}
+    render 'index'
+  end
+
+  def review_events
+    current_instructor = Instructor.find_by(contact_email: current_user.email)
+    @events = Event.joins(:sections).where(sections: { instructor_id: current_instructor.id})
+    if current_user.email == "brian@snowschoolers.com"
+      @events = Event.all
+    end
+    respond_to do |format|
+          format.html
+          format.csv { send_data @events_to_csv.to_csv, filename: "events-#{Date.today}.csv" }
+          format.xls
+    end
+    render 'index'
+  end
+
   # GET /events
   # GET /events.json
-  def index
-    # if params[:start_date]
-    #   @events = Event.all.to_a.keep_if{|event| (event.start_time.to_date - params[:start_date].to_date) <=6 }
-    # else
-    #   @events = Event.all.to_a.keep_if{|event| (event.start_time.to_date - Date.today) <=14 }
-    # end
+  def index   
     @events = Event.all.sort_by { |event| event.start_time}
     @events_to_csv = Event.all
     respond_to do |format|

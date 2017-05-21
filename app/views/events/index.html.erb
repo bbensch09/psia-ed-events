@@ -1,24 +1,21 @@
-<p id="notice"><%= notice %></p>
 <div class="container">
 
 <%if current_user && current_user.user_type == "Ski Area Partner" || (current_user.email == "brian@snowschoolers.com") %>
+<div class="admin-viewable">
+  <%= form_tag import_events_path, multipart: true do %>
+  <h2>
+    <%= file_field_tag :file, class: 'form-control' %> <%= submit_tag "Import from CSV", class: 'btn btn-succss' %>
+  <% end %> | 
+    <%= link_to "Export CSV", events_path(format: "csv"), class: 'btn btn-default' %> |  <%= link_to 'Delete All', delete_all_events_path, method: :delete_all, data: { confirm: 'Are you sure?' },  class: 'btn btn-danger' %> |   <%= link_to 'New event', new_event_path, class: 'btn btn-success' %>
+    | <%= link_to "Auto-Assign", assign_all_events_path, class: 'btn btn-success' %>
+    | <%= link_to "Unassign All", unassign_all_events_path, class: 'btn btn-warning' %>
+    | <%= link_to "Email All Staff", email_all_staff_path, class: 'btn btn-warning' %>
 
-<%= form_tag import_events_path, multipart: true do %>
-<h2>
-  <%= file_field_tag :file, class: 'form-control' %> <%= submit_tag "Import events from CSV", class: 'btn btn-default' %>
-<% end %> | 
-  <%= link_to "Export CSV", events_path(format: "csv"), class: 'btn btn-primary' %> |  <%= link_to 'Delete all Events', delete_all_events_path, method: :delete_all, data: { confirm: 'Are you sure?' },  class: 'btn btn-danger' %>
-</h2>
-<hr class="deposit-hr-navy">
-
+  </h2>
+</div>
 <% end %>
 
-
-<h1 class="center">Scheduled PSIA - W events</h1>
-
-<h4 class="center">
-  <%= link_to 'New event', new_event_path, class: 'btn btn-success' %>
-</h4>
+<h1 class="center">PSIA West - Scheduled Events</h1>
 
 <div class="calendar-container hidden">
   <%= month_calendar(events: @events) do |date, events| %>
@@ -44,7 +41,7 @@
 
 </div>
 
-<hr>
+<hr class="deposit-hr-navy">
 
 <table class="instructors-table">
   <thead>
@@ -57,8 +54,8 @@
       <th>Sport</th>
       <th>Location</th>
       <th>Capacity</th>
-      <th>Eligible Instructors</th>
-      <th colspan="3"></th>
+      <th>Available Staff</th>
+      <th colspan="1"></th>
     </tr>
   </thead>
 
@@ -74,35 +71,34 @@
         <td></td>
         <td></td>
         <% end %>
-        <td><%= event.name %></td>
+        <td><%= link_to event.name, event %></td>
         <td><%= event.category %></td>
         <td><%= event.staff_level %></td>
         <td><%= event.sport.name %></td>
         <td><%= event.location ? event.location.name : "TBD" %></td>
         <td><%= event.capacity %></td>
         <!-- <td><%= event.sections.count %></td> -->
-        <td>
+        <td colspan="2">
           <% if event.available_instructors.any? %>
-            <ul>
+            <ol>
             <% event.available_instructors.each do |instructor| %>
-                 <li> <%= instructor.name %> - <%= instructor.list_sports %> </li>
+                 <li> <%= instructor.name %> - <%= instructor.performance_ranking %> </li>
             <% end %>
-            </ul>
+            </ol>
           <% end %>
         </td>
-        <!-- <td><%= link_to 'Show', event %></td> -->
-        <td><%= link_to 'Edit', edit_event_path(event) %></td>
+        <!-- <td><%= link_to 'Edit', edit_event_path(event) %></td> -->
+        <td></td>
         <!-- <td><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
       </tr>
         <% event.sections.order(:id).each_with_index do |section, index| %>
       <tr>
-        <td></td>
-        <td></td>
-        <td> Staff# <%= (index+1) %></td>
-        <td colspan="2"> Name: <%= section.instructor ? section.instructor.name : "TBD" %></td>
-        <td> <%= section.instructor_status %></td>        
-        <td> Index: <%= index %></td>        
+        <td colspan="2"> Staff# <%= (index+1) %></td>
+        <td colspan="1"> <%= section.instructor ? section.instructor.name : "TBD" %></td>
+        <td colspan="2"> Status: <%= section.instructor_status %></td>        
+        <!-- <td> Index: <%= index %></td>         -->
         <!-- <td><%= link_to "Edit", edit_section_path(section.id), class: 'btn btn-default' %> </td> -->
+        <% if current_user && current_user.email == "brian@snowschoolers.com" %>
         <% if section.instructor_id.to_i == 0 %>
             <td colspan="2">
               <% recommended_instructor = section.event.available_instructors[index] ? section.event.available_instructors[index].id : section.event.available_instructors[0] %>
@@ -122,7 +118,7 @@
             <% end %>
         <% else %>
         <td>
-            <%= form_tag(remove_instructor_from_section_path, :method => "put") do %>
+            <%= form_tag(unassign_instructor_from_section_path, :method => "put") do %>
             <div class="hidden">              
               <%= text_field_tag :section_id, params[:section_id], value: section.id %>
             </div>
@@ -131,9 +127,40 @@
               <%= submit_tag "UNASSIGN", class:"btn btn-warning" %>
             <% end %>
         </td>
+        <td> <%= link_to "Email Staff", email_event_request_to_staff_section_path(section), class: 'btn btn-default' %> </td>
 
         <% end %>
+          <% else %>
+          <td></td>
+          <td></td>
+        <% end %>
+        <% if section.instructor_id.to_i > 0 && current_user.email == "brian@snowschoolers.com" || section.instructor && section.instructor.contact_email == current_user.email %>
+          <% if section.instructor_status == "Confirmed"%>
+            <td>
+              <%= form_tag(cancel_instructor_path, :method => "put") do %>
+              <div class="hidden">              
+                <%= text_field_tag :section_id, params[:section_id], value: section.id %>
+              </div>
+                <%= submit_tag "CANCEL", class:"btn btn-danger" %>
+              <% end %>
+            </td>
+            <% else %>
+            <td>
+              <%= form_tag(confirm_instructor_path, :method => "put") do %>
+              <div class="hidden">              
+                <%= text_field_tag :section_id, params[:section_id], value: section.id %>
+              </div>
+                <%= submit_tag "CONFIRM", class:"btn btn-success" %>
+              <% end %>
+            </td>
+            <td></td>
+            <td></td>
+          <% end %>
+        <% else %>
         <td></td>
+        <td></td>
+        <td></td>
+        <% end %>
       </tr>
         <% end %>
     <% end %>
