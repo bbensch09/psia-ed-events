@@ -5,15 +5,21 @@
     <%= f.input :name, placeholder: 'Event Title', required:true  %>
     </div>
     <div class="col-md-3">
-    <%= f.input :category,  as: :select, collection: ['Accredidation','Certification','Education Event','Fundraiser','Validation'], include_blank: 'Event Name', required:true  %>
+    <%= f.input :category,  as: :select, collection: ['Education Event','Accredidation','Validation','Certification'], include_blank: 'Event Name', required:true  %>
+    </div>
+    <div class="col-md-3">
+    <%= f.input :staff_level,  as: :select, collection: SkiLevel.all, include_blank: 'Level', required:true  %>
     </div>
     
-    <div class="col-md-3">
+  <!--   <div class="col-md-3">
       <%= f.input :start_time, as: :string, input_html: { class:'input-group date datetimepicker1' }, value:@event.start_time , placeholder: 'Pick a date and time', label: true, required:true %>
     </div>
     <div class="col-md-3">
       <%= f.input :end_time, as: :string, input_html: { class:'input-group date datetimepicker1' }, placeholder: 'Pick a date and time', label: true, required:true %>
-    </div>    
+    </div> -->
+    <div class="col-md-3">
+      <%= f.input :date, as: :string, input_html: { id: 'datepicker'}, value:@event.date , placeholder: 'Select Date', label: true, required:true %>
+    </div>
     <div class="col-md-4">
       <%= f.input :length_in_days, as: :select, collection: [1,2,3], include_blank: 'Length of Event'  %>
     </div>

@@ -52,22 +52,23 @@
       <th>ID</th>
       <th>Date</th>
       <th>Name</th>
-      <th>Category</th>
+      <th>Event Type</th>
+      <th>Level</th>
       <th>Sport</th>
       <th>Location</th>
       <th>Capacity</th>
       <th>Eligible Instructors</th>
-      <th>Status</th>
       <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @events.each do |event| %>
-      <tr>
+      <tr class="bold-row">
         <td><%= event.id %></td>
         <% if event.start_time %>
-        <td><%= event.start_time.strftime("%m/%d") %></td>
+        <td><%= event.date.strftime("%m/%d") %></td>
+        <!-- <td><%= event.start_time.strftime("%m/%d") %></td> -->
         <!-- <td><%= event.start_time.strftime("%m/%d @%l%P") %></td> -->
         <% else %>
         <td></td>
@@ -75,30 +76,63 @@
         <% end %>
         <td><%= event.name %></td>
         <td><%= event.category %></td>
+        <td><%= event.staff_level %></td>
         <td><%= event.sport.name %></td>
         <td><%= event.location ? event.location.name : "TBD" %></td>
         <td><%= event.capacity %></td>
         <!-- <td><%= event.sections.count %></td> -->
         <td>
           <% if event.available_instructors.any? %>
+            <ul>
             <% event.available_instructors.each do |instructor| %>
-                  <%= instructor.name %> - <%= instructor.list_sports %> <br>
+                 <li> <%= instructor.name %> - <%= instructor.list_sports %> </li>
             <% end %>
+            </ul>
           <% end %>
         </td>
-        <td><%= event.status %></td>
-        <td><%= link_to 'Show', event %></td>
+        <!-- <td><%= link_to 'Show', event %></td> -->
         <td><%= link_to 'Edit', edit_event_path(event) %></td>
-        <td><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <!-- <td><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
       </tr>
-        <% event.sections.each_with_index do |section, index| %>
+        <% event.sections.order(:id).each_with_index do |section, index| %>
       <tr>
         <td></td>
         <td></td>
         <td> Staff# <%= (index+1) %></td>
-        <td> Name: <%= section.instructor ? section.instructor.name : "TBD" %></td>
-        <td> Capacity: <%= section.capacity %></td>
-        <td> Status: <%= section.instructor_status %></td>
+        <td colspan="2"> Name: <%= section.instructor ? section.instructor.name : "TBD" %></td>
+        <td> <%= section.instructor_status %></td>        
+        <td> Index: <%= index %></td>        
+        <!-- <td><%= link_to "Edit", edit_section_path(section.id), class: 'btn btn-default' %> </td> -->
+        <% if section.instructor_id.to_i == 0 %>
+            <td colspan="2">
+              <% recommended_instructor = section.event.available_instructors[index] ? section.event.available_instructors[index].id : section.event.available_instructors[0] %>
+              <% if recommended_instructor.nil? %>
+                <h3 class="text-warning center">Warning - no staff available!</h3>
+                </td>
+              <% else%> 
+                <%= form_tag(assign_instructor_to_section_path, :method => "put") do %>
+                <%= select_tag :instructor_id, options_from_collection_for_select(section.event.available_instructors, :id, :name, selected:recommended_instructor), class: 'form-control form-group' %>
+                <div class="hidden">              
+                  <%= text_field_tag :section_id, params[:section_id], value: section.id %>
+                </div>
+                <td>
+                      <%= submit_tag "ASSIGN", class:"btn btn-default" %>
+                    <% end %>
+                </td>
+            <% end %>
+        <% else %>
+        <td>
+            <%= form_tag(remove_instructor_from_section_path, :method => "put") do %>
+            <div class="hidden">              
+              <%= text_field_tag :section_id, params[:section_id], value: section.id %>
+            </div>
+        </td>
+        <td>
+              <%= submit_tag "UNASSIGN", class:"btn btn-warning" %>
+            <% end %>
+        </td>
+
+        <% end %>
         <td></td>
       </tr>
         <% end %>

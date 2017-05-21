@@ -5,15 +5,19 @@ class SectionsController < ApplicationController
     puts "the params are #{params}"
     @instructor = Instructor.find(params[:instructor_id])
     @section = Section.find(params[:section_id])
-    @section.instructor_id = @instructor.id    
-    days_shifts = Shift.all.to_a.keep_if {|shift| shift.start_time.to_date == @section.date}
-    shift_to_update = days_shifts.keep_if { |shift| shift.instructor_id == @instructor.id}
-    @shift = shift_to_update.first
-    @shift.update(status:"Assigned")
-    @section.shift_id = @shift.id
+    @section.instructor_id = @instructor.id
+    @section.instructor_status = "Assigned"    
     @section.save!
-    redirect_to "/schedule-filtered?utf8=✓&search_date=#{@section.parametized_date}&age_type=#{@section.age_group}"    
+    redirect_to events_path   
+  end
 
+  def remove_instructor_from_section
+    puts "the params are #{params}"
+    @section = Section.find(params[:section_id])
+    @section.instructor_id = nil
+    @section.instructor_status = "Unassigned"    
+    @section.save!
+    redirect_to events_path   
   end
 
   # GET /sections
@@ -57,7 +61,8 @@ class SectionsController < ApplicationController
   def update
     respond_to do |format|
       if @section.update(section_params)
-        format.html { redirect_to "/schedule-filtered?utf8=✓&search_date=#{@section.parametized_date}&age_type=#{@section.age_group}", notice: 'Section was successfully updated.' }
+        # format.html { redirect_to @section.event, notice: 'Section was successfully updated.' }
+        format.html { redirect_to events_path, notice: 'Section was successfully updated.' }
         format.json { render :show, status: :ok, location: @section }
       else
         format.html { render :edit }
@@ -84,6 +89,6 @@ class SectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def section_params
-      params.require(:section).permit(:age_group, :instructor_id, :status, :level, :sport_id, :capacity, :lesson_type, :date, :name, :shift_id)
+      params.require(:section).permit(:age_group, :instructor_id, :instructor_status, :level, :sport_id, :capacity, :lesson_type, :date, :name, :shift_id)
     end
 end

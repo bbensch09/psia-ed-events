@@ -10,9 +10,14 @@
   <%= @event.category %>
 </p>
 <p>
+  <strong>Staff Level:</strong>
+  <%= @event.staff_level %>
+</p>
+<p>
   <strong>Location:</strong>
   <%= @event.location.name %>
 </p>
+
 <p>
   <strong>Available Instructors:</strong>
   <ul>
@@ -21,6 +26,21 @@
   <% end %>
   </ul>
 </p>
+
+<p>
+  <strong>Assigned Instructors:</strong>
+  <ul>
+    <% @event.sections.each_with_index do |section, index| %>
+      <li> Staff#<%= (index+1) %>
+      <%= section.instructor ? section.instructor.name : "TBD" %>; 
+      Status: <%= section.instructor_status %>;
+      <%= link_to "Edit", edit_section_path(section.id), class: 'btn btn-default' %>
+      </li>
+
+  <% end %>
+  </ul>
+</p>
+
 
 <p>
   <strong>Discipline:</strong>

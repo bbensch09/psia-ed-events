@@ -160,6 +160,8 @@ Rails.application.routes.draw do
   # put 'lessons/:id/assign-to-section/:section_id' => 'lessons#assign_to_section', as: :assign_section
   put 'lessons/assign-to-section' => 'lessons#assign_to_section', as: :assign_section
   put 'sections/assign-instructor-to-section' => 'sections#assign_instructor_to_section', as: :assign_instructor_to_section
+  put   'sections/remove-instructor-from-section'   => 'sections#remove_instructor_from_section',   as: :remove_instructor_from_section
+
 
 
 

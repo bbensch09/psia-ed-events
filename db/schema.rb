@@ -114,11 +114,13 @@ ActiveRecord::Schema.define(version: 20170501010158) do
   create_table "events", force: :cascade do |t|
     t.datetime "start_time"
     t.datetime "end_time"
+    t.date     "date"
     t.string   "name"
     t.string   "status"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.string   "category"
+    t.string   "staff_level"
     t.integer  "length_in_days"
     t.integer  "sport_id"
     t.integer  "location_id"

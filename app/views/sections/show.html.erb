@@ -1,28 +1,23 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Age group:</strong>
-  <%= @section.age_group %>
+  <strong>Event Name:</strong>
+  <%= @section.event.name %>
 </p>
 
 <p>
   <strong>Instructor:</strong>
-  <%= @section.instructor_id %>
+  <%= @section.instructor ? @section.instructor : "TBD" %>
 </p>
 
 <p>
   <strong>Status:</strong>
-  <%= @section.status %>
+  <%= @section.instructor_status %>
 </p>
 
 <p>
-  <strong>Level:</strong>
-  <%= @section.level %>
-</p>
-
-<p>
-  <strong>Sport:</strong>
-  <%= @section.sport_id %>
+  <strong>Discipline:</strong>
+  <%= @section.sport.name %>
 </p>
 
 <p>

@@ -311,9 +311,7 @@ Sport.create!({name: "Telemarking"})
 Sport.create!({name: "Nordic"})
 Sport.create!({name: "Adaptive"})
 
-levels = ["Trainer - Level 1",
-              "Trainer - Level 2",
-              "Trainer - Level 3",
+levels = [    "Trainer - Ed Events only",
               "Examiner - Level 1",
               "Examiner - Level 2",
               "Examiner - Level 3",

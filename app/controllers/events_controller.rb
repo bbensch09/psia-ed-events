@@ -93,7 +93,7 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:start_time, :end_time, :name, :instructor_status, :instructor_id, :category, :length_in_days, :sport_id, :location_id, :capacity, :event_id)
+      params.require(:event).permit(:start_time, :end_time, :date, :name, :instructor_status, :instructor_id, :category, :staff_level, :length_in_days, :sport_id, :location_id, :capacity, :event_id)
     end
 
     def set_week_start_monday

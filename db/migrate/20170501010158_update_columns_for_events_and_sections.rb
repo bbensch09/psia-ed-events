@@ -1,7 +1,8 @@
 class UpdateColumnsForEventsAndSections < ActiveRecord::Migration[5.0]
   def change
   	remove_column :events, :instructor_id, :integer
-  	add_column :events, :category, :string
+    add_column :events, :category, :string
+  	add_column :events, :staff_level, :string
   	add_column :events, :length_in_days, :integer  
   	add_column :events, :sport_id, :integer  
   	add_column :events, :location_id, :integer  

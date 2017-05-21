@@ -8,10 +8,20 @@ class Event < ApplicationRecord
 
   def available_instructors
     all_instructors = self.location.instructors
-    all_instructors = all_instructors.to_a.keep_if {|instructor| instructor.sports.include?(self.sport)}
+    eligible_instructors = all_instructors.to_a.keep_if {|instructor| instructor.sports.include?(self.sport)}
+    # filter instructors based on qualifications
+    eligible_instructors = eligible_instructors.to_a.keep_if {|instructor| instructor.ski_levels.max.value >= self.staff_level.to_i }
+
     #filter instructors that are already busy on that day
+    conflicting_sections = Section.where(date: self.date)
+    busy_instructors = []
+    conflicting_sections.each do |section|
+      busy_instructors << section.instructor
+    end
+    eligible_instructors = eligible_instructors - busy_instructors
+
     #rank instructors for whom the location is their home resort first
-    ranked_instructors = all_instructors.to_a.sort! {|a,b| b.performance_ranking <=> a.performance_ranking }
+    ranked_instructors = eligible_instructors.to_a.sort! {|a,b| b.performance_ranking <=> a.performance_ranking }
     ranked_instructors.first(5)
   end
 
@@ -31,6 +41,7 @@ class Event < ApplicationRecord
       Section.create!({
             sport_id: event.sport_id,
             instructor_id: nil,
+            date: event.date,
             capacity: 10,
             event_id: event.id,
             instructor_status: "unassigned"
