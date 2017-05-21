@@ -1,29 +1,24 @@
 
-resorts = [
-      "Alpine Meadows",
-      "Alta",
-      "Aspen",
-      "Bear Valley",
-      "Diamond Peak",
-      "Dodge Ridge",
-      "Donner Ski Ranch",
-      "Homewood",
-      "Jackson Hole",
-      "Mt. Rose",
-      "Soda Springs",
-      "Snowbasin",
-      "Snowbird",
-      "Squaw Valley",
-      "Sun Valley",
-      "Sugar Bowl",
-      "Tahoe Donner",
-      "Taos"
-      ]
-resorts.each do |resort|
-  Location.create!({
-  name: resort
-  })
-end
+# resorts = [      
+#       "Homewood",
+#       "Jackson Hole",
+#       "Mt. Rose",
+#       "Soda Springs",
+#       "Snowbasin",
+#       "Snowbird",
+#       "Squaw Valley",
+#       "Sun Valley",
+#       "Sugar Bowl",
+#       "Tahoe Donner",
+#       "Taos"
+#       ]
+
+# resorts.each do |resort|
+#   Location.create!({
+#   name: resort
+#   })
+# end
+
 
 =begin
 hw_seed_accounts = [
@@ -298,7 +293,7 @@ Product.create!({
 
 =end
 
-puts "seed complete, locations created."
+# puts "seed complete, locations created."
 
 # ski_levels = ["Level 1 - first-time ever, no previous experience.",
 #               "Level 2 - safely stops on beginner green circle terrain.",
@@ -310,37 +305,52 @@ puts "seed complete, locations created."
 #               "Level 8 - safely navigates moguls and off-piste terrain.",
 #               "Level 9 - confidently and safely skis expert-only (double-black diamond) terrain."]
 
-Sport.create!({name: "Ski Instructor"})
-Sport.create!({name: "Telemark Instructor"})
-Sport.create!({name: "Snowboard Instructor"})
+Sport.delete_all
+SkiLevel.delete_all
+SnowboardLevel.delete_all
 
-ski_levels = ["Level 1 - first-time ever, no previous experience.",
-              "Level 2 - can safely stop on beginner green circle terrain.",
-              "Level 3 - can makes wedge turns (heel-side turns for snowboarding) in both directions on beginner terrain.",
-              "Level 4 - can link turns with moderate speed on all beginner terrain.",
-              "Level 5 - can make mostly parallel turns (S-turns for snowboarding) and safely navigate intermediate runs.",
-              "Level 6 - can confidently link parallel turns across all intermediate terrain.",
-              "Level 7 - can control speed, rhythm, and shape of turns across variety of intermediate and advanced terrain.",
-              "Level 8 - can ski moguls and off-piste terrain in all snow conditions.",
-              "Level 9 - can confidently and safely ski expert-only (double-black diamond) terrain."]
+Sport.create!({name: "Skiing"})
+Sport.create!({name: "Snowboarding"})
+Sport.create!({name: "Telemarking"})
+Sport.create!({name: "Nordic"})
+Sport.create!({name: "Adaptive"})
 
-ski_levels.each do |level|
+SkiLevel.create!({
+  name: "Trainer - Ed Events only",
+  value: 1
+  })
+SnowboardLevel.create!({
+  name: "Trainer - Ed Events only",
+  value: 1
+  })
+
+levels = [    
+              "Examiner - Level 1",
+              "Examiner - Level 2",
+              "Examiner - Level 3",
+              "Examiner - Ed Staff"
+              ]
+
+levels.each do |level|
   SkiLevel.create!({
   name: level,
-  value: SkiLevel.count + 1
+  value: SkiLevel.count
   })
 
   SnowboardLevel.create!({
   name: level,
-  value: SnowboardLevel.count + 1
+  value: SnowboardLevel.count
   })
 end
-puts "Ski and snowboard level 1-9 created."
+
+
+puts "Ski and snowboard examiner levels created."
 
 
 #BEGIN seed file to setup for Demo
-Instructor.seed_temp_instructors
+# Instructor.seed_temp_instructors
 
+=begin
 (0...5).to_a.each do |day_num|
     puts "!!! - beginning to create lessons, shifts, sections for day_num: #{day_num}"
     num_lessons = (15..55).to_a.sample
@@ -349,3 +359,4 @@ Instructor.seed_temp_instructors
     Lesson.seed_lessons(Date.today+day_num,num_lessons)
   end
     puts "!!!! completed seeding for 5 days"
+=end

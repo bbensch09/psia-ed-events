@@ -11,15 +11,8 @@
 
   <h1> <%= @instructor.name %>, <%= @instructor.age %> </h1>
   <h3>
-  <% if @instructor.ski_instructor? %>
-  Skiing <img src= "/assets/skier-icon.ico" class="icons">
-  <% end %>
-  <% if @instructor.snowboard_instructor? %>
-  Snowboarding <img src= "/assets/snowboarder-icon.png" class="icons">
-  <% end %>
-  <% if @instructor.telemark_instructor? %>
-  Telemark <img src= "/assets/telemark-icon.png" class="tele-icon">
-  <% end %>
+    <%= render partial: "instructor_disciplines" %>
+  </h3>
   <br>
   <div class="star-rating" data-score= <%= ((@instructor.average_rating*10).round/10.0) %> >
   Average Rating: </h3>
@@ -67,16 +60,6 @@
 </div>
 </div>
 
-<% if current_user && current_user.email == "brian@snowschoolers.com" %>
-<section class='admin-viewable'>
-  <h4> ADMIN ONLY: Add a new review manually.</h4>
-  <div class="row col-md-12">
-    <% @lesson = Lesson.new({instructor_id:@instructor.id, requester_id:current_user.id}) %>
-    <% @lesson.review = Review.new unless @lesson.review %>
-    <%= render 'reviews/form' %>
-  </div>
-</section>
-<% end %>
 
 <% if @instructor.reviews.count > 0 %>
 <h1 class="center"> <%= @instructor.name %>'s Recent Reviews </h1>

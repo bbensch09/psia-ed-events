@@ -1,20 +1,68 @@
 class Instructor < ActiveRecord::Base
   belongs_to :user
-  has_and_belongs_to_many :locations
-  has_and_belongs_to_many :ski_levels
-  has_and_belongs_to_many :snowboard_levels
+  has_and_belongs_to_many :locations, dependent: :destroy
+  has_and_belongs_to_many :primary_locations, dependent: :destroy
+  has_and_belongs_to_many :ski_levels, dependent: :destroy
+  has_and_belongs_to_many :snowboard_levels, dependent: :destroy
   has_many :lesson_actions
   has_many :lessons
-  has_and_belongs_to_many :sports
+  has_and_belongs_to_many :sports, dependent: :destroy
   has_many :reviews
   has_many :calendar_blocks
   has_many :sections
-  after_create :send_admin_notification
-  validates :username, :first_name, :last_name, :certification, :intro, presence: true
+  # after_create :send_admin_notification
+  validates  :first_name, :last_name, presence: true
   has_attached_file :avatar, styles: { large: "400x400>", thumb: "80x80>" },  default_url: "https://s3.amazonaws.com/snowschoolers/cd-sillouhete.jpg",
         :storage => :s3,
         :bucket => 'snowschoolers'
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
+
+  def self.import(file)
+    CSV.foreach(file.path, headers:true) do |row|
+        instructor = Instructor.find_or_create_by(id: row['id'])
+        instructor.first_name = row["first_name"]
+        instructor.last_name = row["last_name"]
+        instructor.contact_email = row["contact_email"]
+        instructor.update_attributes(sport_ids: row["sport_ids"].split(",").map{|i| i.to_i })
+        instructor.update_attributes(primary_location_ids: row["primary_location_ids"].split(",").map{|i| i.to_i })
+        instructor.update_attributes(location_ids: row["location_ids"].split(",").map{|i| i.to_i })
+        if row["ski_level_ids"].to_i > 0
+          instructor.update_attributes(ski_level_ids: row["ski_level_ids"].to_i)
+        end
+        if row["snowboard_level_ids"].to_i > 0
+          instructor.update_attributes(snowboard_level_ids: row["snowboard_level_ids"].to_i)
+        end
+        instructor.status = row["status"]
+        instructor.performance_ranking = row["performance_ranking"]
+        instructor.save!
+    end
+  end
+
+  def self.to_csv(options = {})
+    desired_columns = %w{ id  first_name  last_name contact_email phone_number  sport_ids primary_location_ids  location_ids  ski_level snowboard_level status  performance_ranking
+    }
+    CSV.generate(headers: true) do |csv|
+      csv << desired_columns
+      all.each do |instructor|
+        csv << instructor.attributes.values_at(*desired_columns)
+      end
+    end
+  end
+
+  def self.assign_locations_and_levels
+    Instructor.all.each do |instructor|
+      instructor.sport_ids = (1..5).to_a.sample
+      instructor.location_ids = [14, 26, 21]
+      instructor.primary_location_ids = [14,26,21,22,24,8,7,19,27,23,18,20,25,1,5,28,11].sample
+      instructor.ski_level_ids = (1..7).to_a.sample
+      instructor.snowboard_level_ids = (1..7).to_a.sample
+      instructor.performance_ranking = (50..99).to_a.sample
+      instructor.city = ['Tahoe City','Truckee','Reno','Mammoth','Los Angeles','Truckee','Kings Beach','Tahoe City','Homewood','South Lake Tahoe','Meyers','Incline Village','Kirkwood'].sample
+      instructor.save
+    end
+  end
+
+
 
   def self.scheduled_for_date(date)
     eligible_shifts = Shift.all.to_a.keep_if {|shift| shift.start_time.to_date == date}
@@ -70,15 +118,31 @@ class Instructor < ActiveRecord::Base
   end
 
   def ski_instructor?
-    return true if self.sports.include?(Sport.where(name:"Ski Instructor").first)
+    return true if self.sports.include?(Sport.where(name:"Skiing").first)
   end
 
   def snowboard_instructor?
-    return true if self.sports.include?(Sport.where(name:"Snowboard Instructor").first)
+    return true if self.sports.include?(Sport.where(name:"Snowboarding").first)
   end
 
   def telemark_instructor?
-    return true if self.sports.include?(Sport.where(name:"Telemark Instructor").first)
+    return true if self.sports.include?(Sport.where(name:"Telemarking").first)
+  end
+
+  def nordic_instructor?
+    return true if self.sports.include?(Sport.where(name:"Nordic").first)
+  end
+
+  def adaptive_instructor?
+    return true if self.sports.include?(Sport.where(name:"Adaptive").first)
+  end
+
+  def list_sports
+    sports = []
+    self.sports.each do |sport|
+      sports << sport.name
+    end
+    sports.join(", ")
   end
 
   def average_rating
@@ -134,20 +198,7 @@ class Instructor < ActiveRecord::Base
   end
 
   def referral_source
-    case self.how_did_you_hear.to_i
-    when 1
-      return 'From a friend'
-    when 2
-      return 'Facebook'
-    when 3
-      return 'Google'
-    when 4
-      return 'From a Flyer'
-    when 5
-      return 'Linkedin'
-    when 100
-      return 'Other'
-    end
+      return 'Unknown'
   end
 
 

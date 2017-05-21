@@ -6,15 +6,11 @@
         - user_id
         - first_name
         - last_name
-        - username
-        - locations
         - sports
-        - sport
-        - preferred_locations
+        - primary_locations
+        - locations
         - status
-        - overall_initial_rank
-        - kids_initial_rank
-        - adults_initial_rank
+        - performance_ranking
   User:
     :options:
         :fields:

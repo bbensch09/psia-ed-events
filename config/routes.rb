@@ -1,6 +1,18 @@
 Rails.application.routes.draw do
 
-  resources :shifts
+  resources :primary_locations do 
+            collection {post :import}
+            collection {post :delete_all}
+  end
+  get 'events/review' => 'events#review_events', as: :review_events
+  get  'assign-all-remaining'   => 'events#assign_all_remaining_events',   as: :assign_all_events
+  get  'unassign-all'   => 'events#unassign_all_events',   as: :unassign_all_events
+  get  'email-schedules-to-staff'   => 'events#email_all_staff',   as: :email_all_staff
+
+  resources :events do 
+    collection {post :import}
+    collection {post :delete_all}
+  end
   resources :product_calendars
   resources :selfies
   resources :contestants
@@ -44,6 +56,7 @@ Rails.application.routes.draw do
 
   resources :locations do 
         collection {post :import}
+        collection {post :delete_all}
   end
   resources :charges
 
@@ -120,6 +133,8 @@ Rails.application.routes.draw do
 
 
   resources :instructors do
+    collection {post :import}
+    collection {post :delete_all}
     member do
         post :verify
         post :revoke
@@ -150,10 +165,19 @@ Rails.application.routes.draw do
   # put 'lessons/:id/assign-to-section/:section_id' => 'lessons#assign_to_section', as: :assign_section
   put 'lessons/assign-to-section' => 'lessons#assign_to_section', as: :assign_section
   put 'sections/assign-instructor-to-section' => 'sections#assign_instructor_to_section', as: :assign_instructor_to_section
+  put   'sections/remove-instructor-from-section'   => 'sections#unassign_instructor_from_section',   as: :unassign_instructor_from_section
+  put   'sections/confirm-instructor'   => 'sections#confirm_instructor',   as: :confirm_instructor
+  put   'sections/cancel-instructor'   => 'sections#cancel_instructor',   as: :cancel_instructor
+  # post   'sections/send-confirmation-email'   => 'sections#email_event_request_to_staff',   as: :email_event_request_to_staff
 
 
 
-  resources :sections
+
+  resources :sections do
+    member do
+      get :email_event_request_to_staff
+    end
+  end
   resources :lessons
   # get 'new_request' => 'lessons#new_request'
   get 'new_request/:id' => 'lessons#new_request'

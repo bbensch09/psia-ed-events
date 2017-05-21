@@ -4,7 +4,7 @@ class SportsController < ApplicationController
   # GET /sports
   # GET /sports.json
   def index
-    @sports = Sport.all
+    @sports = Sport.all.sort_by { |sport| sport.id}
   end
 
   # GET /sports/1

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170420182826) do
+ActiveRecord::Schema.define(version: 20170501010158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,14 +111,27 @@ ActiveRecord::Schema.define(version: 20170420182826) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
 
+  create_table "events", force: :cascade do |t|
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.date     "date"
+    t.string   "name"
+    t.string   "status"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "category"
+    t.string   "staff_level"
+    t.integer  "length_in_days"
+    t.integer  "sport_id"
+    t.integer  "location_id"
+    t.integer  "capacity"
+  end
+
   create_table "instructors", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "username"
     t.string   "certification"
     t.string   "phone_number"
-    t.string   "preferred_locations"
-    t.string   "sport"
     t.text     "bio"
     t.text     "intro"
     t.string   "status"
@@ -126,25 +139,27 @@ ActiveRecord::Schema.define(version: 20170420182826) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "city"
-    t.integer  "adults_initial_rank"
-    t.integer  "kids_initial_rank"
     t.integer  "overall_initial_rank"
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
-    t.string   "how_did_you_hear"
     t.string   "confirmed_certification"
-    t.boolean  "kids_eligibility"
-    t.boolean  "seniors_eligibility"
-    t.boolean  "adults_eligibility"
     t.integer  "age"
     t.date     "dob"
+    t.string   "contact_email"
+    t.integer  "performance_ranking"
+    t.integer  "home_resort_location"
   end
 
   create_table "instructors_locations", id: false, force: :cascade do |t|
     t.integer "instructor_id", null: false
     t.integer "location_id",   null: false
+  end
+
+  create_table "instructors_primary_locations", id: false, force: :cascade do |t|
+    t.integer "instructor_id",       null: false
+    t.integer "primary_location_id", null: false
   end
 
   create_table "instructors_ski_levels", id: false, force: :cascade do |t|
@@ -256,6 +271,31 @@ ActiveRecord::Schema.define(version: 20170420182826) do
     t.datetime "updated_at"
   end
 
+  create_table "primary_locations", force: :cascade do |t|
+    t.string   "name"
+    t.string   "partner_status"
+    t.string   "calendar_status"
+    t.string   "region"
+    t.string   "state"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
+    t.integer  "vertical_feet"
+    t.integer  "base_elevation"
+    t.integer  "peak_elevation"
+    t.integer  "skiable_acres"
+    t.integer  "average_snowfall"
+    t.integer  "lift_count"
+    t.string   "address"
+    t.boolean  "night_skiing"
+    t.string   "city"
+    t.string   "state_abbreviation"
+    t.date     "closing_date"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
   create_table "product_calendars", force: :cascade do |t|
     t.integer  "product_id"
     t.integer  "price"
@@ -302,18 +342,15 @@ ActiveRecord::Schema.define(version: 20170420182826) do
   end
 
   create_table "sections", force: :cascade do |t|
-    t.string   "age_group"
-    t.string   "lesson_type"
     t.integer  "sport_id"
     t.string   "instructor_id"
-    t.string   "status"
-    t.string   "level"
     t.integer  "capacity"
     t.date     "date"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.string   "name"
-    t.integer  "shift_id"
+    t.integer  "event_id"
+    t.string   "instructor_status"
   end
 
   create_table "selfies", force: :cascade do |t|
@@ -324,16 +361,6 @@ ActiveRecord::Schema.define(version: 20170420182826) do
     t.string   "social_network"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-  end
-
-  create_table "shifts", force: :cascade do |t|
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.string   "name"
-    t.string   "status"
-    t.integer  "instructor_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
   end
 
   create_table "ski_levels", force: :cascade do |t|

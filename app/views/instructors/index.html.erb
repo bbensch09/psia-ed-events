@@ -2,19 +2,21 @@
 
 <%if current_user && current_user.user_type == "Ski Area Partner" || (current_user.email == "brian@snowschoolers.com") %>
 
-<%= form_tag import_products_path, multipart: true do %>
+<%= form_tag import_instructors_path, multipart: true do %>
 <h2>
   <%= file_field_tag :file, class: 'form-control' %> <%= submit_tag "Import Instructors from CSV", class: 'btn btn-default' %>
 <% end %> | 
-  <%= link_to "Export CSV", products_path(format: "csv"), class: 'btn btn-primary' %> |  <%= link_to 'Delete all Staff', delete_all_products_path, method: :delete_all, data: { confirm: 'Are you sure?' },  class: 'btn btn-danger' %>
+  <%= link_to "Export CSV", instructors_path(format: "csv"), class: 'btn btn-primary' %> |  <%= link_to 'Delete all Staff', delete_all_instructors_path, method: :delete_all, data: { confirm: 'Are you sure?' },  class: 'btn btn-danger' %>
 </h2>
 
 
 <div class="col-md-6">
     <h4>Total Staff count: <%= Instructor.count %> </h4>
-    <h4>Active Ski Examiners: <%= (Instructor.where(sport:"Ski Instructor",status:"Active").count + Instructor.where(sport:"Both Ski & Snowboard",status:"Active").count) %> </h4>
-    <h4>Active Snowboard Examiners: <%= (Instructor.where(sport:"Snowboard Instructor", status:"Active").count + Instructor.where(sport:"Both Ski & Snowboard",status:"Active").count) %> </h4>
-    <h4>Inactive Examiners: <%= (Instructor.count - Instructor.where(status:"Active").count) %> </h4>
+    <h4>Ski Examiners: <%= Instructor.joins(:sports).where(sports: {name:"Skiing"}).count %> </h4>
+    <h4>Snowboard Examiners: <%= Instructor.joins(:sports).where(sports: {name:"Snowboarding"}).count %> </h4>
+    <h4>Telemark Examiners: <%= Instructor.joins(:sports).where(sports: {name:"Telemarking"}).count %> </h4>
+    <h4>Nordic Examiners: <%= Instructor.joins(:sports).where(sports: {name:"Nordic"}).count %> </h4>
+    <h4>Adaptive Examiners: <%= Instructor.joins(:sports).where(sports: {name:"Adaptive"}).count %> </h4>
 </div>
 <% if current_user.location %>
 <div class="col-md-6">
@@ -33,25 +35,26 @@
 <!--       <th>First</th>
       <th>Last</th> -->
       <!-- <th>ID</th> -->
+      <th>ID</th>
       <th></th>
       <th>Name</th>
       <th>Email</th>
       <th>Admin Actions</th>
       <th>Status?</th>
+      <th>Discipline(s)</th>
+      <th>City</th>
       <th>Home resort</th>
-      <th>Max Ski Level</th>
-      <th>Max Snowboard Level</th>
-      <th>Rank</th>
-      <th>Certification</th>
-      <th>Sport</th>
-      <!-- <th>Verified Instructor?</th> -->
+      <th>Eligible locations</th>
+      <th>Ski Level</th>
+      <th>Snowboard Level</th>
+      <th>Performance Rank</th>
     </tr>
   </thead>
 
   <tbody>
     <% @instructors.each do |instructor| %>
       <tr>
-        <!-- <td><%= instructor.id %></td> -->
+        <td><%= instructor.id %></td>
         <td> <%= link_to image_tag(instructor.avatar.url(:thumb), alt:"avatar-img", class:"img-responsive img-thumbnail avatar-thumbnail"), edit_instructor_path(instructor) %> </td>
         <td><%= link_to "#{instructor.name}", show_candidate_instructor_path(instructor) %></td>
         <!-- <td>
@@ -59,20 +62,34 @@
               <%= location.name %> <br>
           <% end %>
         </td> -->
-        <td> <%= instructor.user ? instructor.user.email : "N/A - must link to user" %> </td>
+        <td> <%= instructor.contact_email %> </td>
         <% if instructor.status != "Active" %>
         <td><%= link_to 'Activate', verify_instructor_path(instructor), method: :post, class: 'btn btn-success' %></td>
           <% else %>
         <td><%= link_to 'Revoke', revoke_instructor_path(instructor), method: :post, class: 'btn btn-danger' %></td>
         <% end %>
-        <td>Currently <%= instructor.status %></td>
-        <td>
-        <%if instructor.locations && instructor.locations.include?(current_user.location) %>
-          <%= current_user.location.name %>
+        <td><%= instructor.status %></td>
+        <% if instructor.sport_ids.count > 0 %>
+          <td><% instructor.sport_ids.each do |sport_id| %>
+            <span><%= Sport.find(sport_id).name %></span> <br>
+            <% end %> 
+          </td>
           <% else %>
-          Other
-          <%end%>
+          <td></td>
+        <% end %>
+        <td><%= instructor.city %></td>
+        <% if instructor.primary_location_ids.count > 0 %>
+        <td><%= Location.find(instructor.primary_location_ids.first).name %> </td>
+        <% else %>
+        <td></td>
+        <% end %>
+
+        <td>
+          <% instructor.locations.each do|location| %> 
+            <%= location.name %> <br>
+          <% end %>
         </td>
+        
         <%if instructor.ski_levels.any? %>
         <td><%= instructor.ski_levels.max.value %></td>
           <%else%>
@@ -83,9 +100,7 @@
           <%else%>
           <td>N/A</td>
         <%end%>
-        <td><%= instructor.overall_initial_rank %></td>
-        <td><%= instructor.certification %></td>
-        <td><%= instructor.sport %></td>
+        <td><%= instructor.performance_ranking %></td>
       </tr>
     <% end %>
   </tbody>

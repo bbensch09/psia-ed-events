@@ -1,6 +1,16 @@
 class LessonMailer < ActionMailer::Base
   default from: 'SnowSchoolers.com <info@snowschoolers.com>'
 
+  def email_event_request_to_staff(section)
+    @section = section
+    mail(to: section.instructor.contact_email, cc:'brian@snowschoolers.com', subject: "PSIA Ed Staff Scheduling Request - #{@section.name} on #{@section.date}" )
+  end
+
+  def email_full_schedule(instructor)
+    @instructor = instructor
+    mail(to: instructor.contact_email, cc:'brian@snowschoolers.com', subject: "PSIA Ed Staff Schedule Updates for #{@instructor.name} - please review" )
+  end
+
   def track_apply_visits(email="Unknown user")
       @email = email
       mail(to: 'brian@snowschoolers.com', subject: "Pageview at /apply - #{email}.")
@@ -131,7 +141,7 @@ class LessonMailer < ActionMailer::Base
 
   def new_instructor_application_received(instructor)
     @instructor = instructor
-    mail(to: 'brian@snowschoolers.com', subject: "Submitted Application: #{@instructor.username} has applied to join Snow Schoolers")
+    mail(to: 'brian@snowschoolers.com', subject: "Submitted Application: #{@instructor.contact_email} has applied to join Snow Schoolers")
   end
 
   def new_homewood_application_received(applicant)

@@ -1,0 +1,50 @@
+<div class="container">
+<%= semantic_form_for @event do |f| %>
+  <%= f.inputs do %>
+    <div class="col-md-3">
+    <%= f.input :name, placeholder: 'Event Title', required:true  %>
+    </div>
+    <div class="col-md-3">
+    <%= f.input :category,  as: :select, collection: ['Education Event','Accredidation','Validation','Certification'], include_blank: 'Event Name', required:true  %>
+    </div>
+    <div class="col-md-3">
+    <%= f.input :staff_level,  as: :select, collection: SkiLevel.all, include_blank: 'Level', required:true  %>
+    </div>
+    
+  <!--   <div class="col-md-3">
+      <%= f.input :start_time, as: :string, input_html: { class:'input-group date datetimepicker1' }, value:@event.start_time , placeholder: 'Pick a date and time', label: true, required:true %>
+    </div>
+    <div class="col-md-3">
+      <%= f.input :end_time, as: :string, input_html: { class:'input-group date datetimepicker1' }, placeholder: 'Pick a date and time', label: true, required:true %>
+    </div> -->
+    <div class="col-md-3">
+      <%= f.input :date, as: :string, input_html: { id: 'datepicker'}, value:@event.date , placeholder: 'Select Date', label: true, required:true %>
+    </div>
+    <div class="col-md-4">
+      <%= f.input :length_in_days, as: :select, collection: [1,2,3], include_blank: 'Length of Event'  %>
+    </div>
+    <div class="col-md-4">
+      <%= f.input :sport_id, as: :select, collection: Sport.all.sort_by{|sport| sport.name}, include_blank: 'Discipline'  %>
+  
+    </div>
+    <div class="col-md-4">
+    <%= f.input :status, as: :select, collection: ['New Event', 'Scheduling Staff','Scheduled'], include_blank: 'Status'  %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :capacity, placeholder: 'Capacity', required:true  %>
+    </div>
+  
+    <div class="col-md-6">
+      <%= f.input :location_id, as: :select, collection: Location.all.sort_by{|location| location.name}, include_blank: "Event Location" %>
+    </div>
+
+
+  <% end %>
+
+  <%= f.actions do %>
+    <div class="col-md-4">
+      <%= f.action :submit, :as => :input %>
+    </div>
+  <% end %>
+<% end %>
+</div>

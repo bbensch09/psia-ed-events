@@ -4,7 +4,7 @@
   <% if @instructor.user %>
       <%= @instructor.user.email %>
     <% else %>
-      <%= @instructor.username %>
+      <%= @instructor.contact_email %>
   <% end %>
 </p>
 <div class="col-lg-12 col-sm-12 square-image">
@@ -29,35 +29,24 @@
   <%= @instructor.phone_number %>
 </p>
 
-<p>
-  <strong>Sport:</strong>
-  <% if @instructor.ski_instructor? %>
-  Skiing <img src= "/assets/skier-icon.ico" class="icons">
-  <% end %>
-  <% if @instructor.snowboard_instructor? %>
-  Snowboarding <img src= "/assets/snowboarder-icon.png" class="icons">
-  <% end %>
-  <% if @instructor.telemark_instructor? %>
-  Telemark <img src= "/assets/telemark-icon.png" class="tele-icon">
-  <% end %></p>
+<%= render partial: "instructor_disciplines" %>
 
 <p>
-  <strong>Resorts Preferences:</strong>
+  <strong>Preferred Resorts:</strong>
   <ul>
-    <% @instructor.locations.each do |location| %>
+    <% @instructor.primary_locations.each do |location| %>
     <li> <%= location.name %> </li>
     <% end %>
   </ul>
 </p>
 
 <p>
-  <strong>Intro:</strong>
-  <%= @instructor.intro %>
-</p>
-
-<p>
-  <strong>Preferred Resorts:</strong>
-  <%= @instructor.preferred_locations %>
+  <strong>Eligible (secondary) Resorts:</strong>
+  <ul>
+    <% @instructor.locations.each do |location| %>
+    <li> <%= location.name %> </li>
+    <% end %>
+  </ul>
 </p>
 
 <p>

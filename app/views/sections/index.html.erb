@@ -5,10 +5,8 @@
 <table>
   <thead>
     <tr>
-      <th>Age group</th>
       <th>Instructor</th>
       <th>Status</th>
-      <th>Level</th>
       <th>Sport</th>
       <th>Capacity</th>
       <th colspan="3"></th>
@@ -18,10 +16,8 @@
   <tbody>
     <% @sections.each do |section| %>
       <tr>
-        <td><%= section.age_group %></td>
         <td><%= section.instructor_id %></td>
-        <td><%= section.status %></td>
-        <td><%= section.level %></td>
+        <td><%= section.instructor_status %></td>
         <td><%= section.sport_id %></td>
         <td><%= section.capacity %></td>
         <td><%= link_to 'Show', section %></td>
