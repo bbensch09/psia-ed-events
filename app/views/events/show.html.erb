@@ -36,6 +36,10 @@
       Status: <%= section.instructor_status %>;
       <%= link_to "Edit", edit_section_path(section.id), class: 'btn btn-default' %>
       </li>
+      <% event = {text:@event.name, date:@event.date, location:@event.location.address} %>
+      <li>
+        <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=<%=event[:text]%>&dates=<%=event[:date]%>&details=For+details,+link+here:+http://www.example.com&location=Waldorf+Astoria,+301+Park+Ave+,+New+York,+NY+10022&sf=true&output=xml" class="btn btn-default" target="_blank"> Add to Calendar: <%=event[:text] %></a>
+      </li>
 
   <% end %>
   </ul>

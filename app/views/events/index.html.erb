@@ -1,6 +1,6 @@
 <div class="container">
 
-<%if current_user && current_user.user_type == "Ski Area Partner" || (current_user.email == "brian@snowschoolers.com") %>
+<%if current_user && current_user.user_type == "Ski Area Partner" || (current_user && current_user.email == "brian@snowschoolers.com") %>
 <div class="admin-viewable">
   <%= form_tag import_events_path, multipart: true do %>
   <h2>
@@ -134,7 +134,7 @@
           <td></td>
           <td></td>
         <% end %>
-        <% if section.instructor_id.to_i > 0 && current_user.email == "brian@snowschoolers.com" || section.instructor && section.instructor.contact_email == current_user.email %>
+        <% if section.instructor_id.to_i > 0 && (current_user && current_user.email == "brian@snowschoolers.com") || section.instructor && (current_user && section.instructor.contact_email == current_user.email) %>
           <% if section.instructor_status == "Confirmed"%>
             <td>
               <%= form_tag(cancel_instructor_path, :method => "put") do %>
