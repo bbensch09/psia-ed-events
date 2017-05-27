@@ -12,6 +12,9 @@ class InstructorsController < ApplicationController
 
   def delete_all
     Instructor.delete_all
+    ActiveRecord::Base.connection.execute("DELETE from instructors_sports")
+    ActiveRecord::Base.connection.execute("DELETE from instructors_locations")
+    ActiveRecord::Base.connection.execute("DELETE from instructors_primary_locations")
     redirect_to instructors_path, notice: "All instructors have been deleted."
   end
 

@@ -102,7 +102,7 @@
   <div class="col-md-12">
   <h4> <b> Primary resort - where do you typically teach during the season?</b> </h4>
     <input type="checkbox" id="selectAllLocations" value="selectAll"> Select / De-select All<br/><br/>
-      <%= f.collection_check_boxes :location_ids, PrimaryLocation.all, :id, :name do |location_item| %>
+      <%= f.collection_check_boxes :primary_location_ids, PrimaryLocation.all, :id, :name do |location_item| %>
       <div class="collection-check-box col-md-4">
         <%= location_item.check_box(class: 'location-checkbox')  %>
         <%= location_item.label %>
@@ -118,7 +118,7 @@
     <h4 class="col-md-12">
       <input type="checkbox" id="selectAll-<%=location.region.to_s.split(' ').join('')%>" value="selectAll"> Select (deselect) all of <%=location.region%> <br/>
     </h4>
-      <%= f.collection_check_boxes :primary_location_ids, Location.where(region:location.region), :id, :name do |location_item| %>
+      <%= f.collection_check_boxes :location_ids, Location.where(region:location.region), :id, :name do |location_item| %>
           <div class="collection-check-box region-1 col-md-3">
             <%= location_item.check_box(class: location.region.to_s.split(' ').join(''))  %>
             <%= location_item.label %>
