@@ -103,9 +103,8 @@
 <header id="header">
   <div class="container">
   <h2>
-    <%= link_to raw("<strong>PSIA</strong><span class='schoolers'>WEST</span>"), root_path, class: 'logo' %>
 
-  <!-- <%= link_to image_tag("AdventureOut-logo-whiteBG.jpg"), root_path, class: 'logo' %> -->
+  <%= link_to image_tag("https://s3.amazonaws.com/snowschoolers/PSIA-AASI-WEST-LOGO-340x156.png"), root_path, class: 'logo white-bg' %>
 
     <ul id="topOptions">
       <li>
@@ -124,31 +123,22 @@
            <!-- <li> <a href="/search" class="btn-success"> Search</a></li> -->
            <li> <a href="/primary_locations" class="btn-success"> Primary Locations</a></li>
            <li> <a href="/locations" class="btn-success"> Locations</a></li>
-           <li> <a href="/instructors" class="btn-success"> View Staff</a></li>
-           <li> <a href="/events" class="btn-success"> View Events</a></li>
+           <li> <a href="/instructors" class="btn btn-default"> View Staff</a></li>
+           <li> <a href="/events" class="btn btn-default"> View Events</a></li>
            <% if current_user.instructor %>
            <li><%= link_to current_user.email, instructor_path(current_user.instructor) %></li>
            <% end %>
-            <li><a href="/lessons" class="sign-up-btn"> Lessons </a></li>
-            <li><a href="/browse" class="sign-up-btn">Instructors</a></li>
-            <li><%= link_to 'Inbox', '/my_conversations', class: 'sign-up-btn' %></li>
             <li> <%= link_to 'Logout', destroy_user_session_path %> </li>
 
           <% elsif current_user %>
             <% name = current_user.email.present? ? current_user.email : 'Edit Profile' %>
             <% if current_user.instructor.nil? %>
                 <li><%= link_to name, "#", class: "nav-email-noaction" %></li>
-                <li><a href="/lessons" class="sign-up-btn"> Lessons</a></li>
-                <li><%= link_to 'Inbox', '/my_conversations', class: 'sign-up-btn' %></li>
-              <li><a href="/blog" target="_blank" class="sign-up-btn">Blog</a></li>
-                <li><a href="/browse" class="sign-up-btn">Instructors</a></li>
-                <li><%= link_to 'Teach with Us', '/apply', class: 'sign-up-btn' %></li>
+                <li><a href="/browse" class="sign-up-btn">Browse Ed Staff</a></li>
               <% elsif current_user.active_instructor? %>
                 <li><%= link_to name, instructor_path(current_user.instructor) %></li>
                 <li><a href="/events/review" class="sign-up-btn"> Review Schedule </a></li>
-                <li><%= link_to 'Inbox', '/my_conversations', class: 'sign-up-btn' %></li>
-                <li><a href="/browse" class="sign-up-btn">Instructors</a></li>
-                <li><a href="/calendar_blocks" class="sign-up-btn"> Manage Availability </a></li>
+                <li><a href="/browse" class="sign-up-btn">Browse Ed Staff</a></li>
               <% else %>
                 <li><%= link_to name, "#", class: "nav-email-noaction" %></li>
                 <li><%= link_to 'Check Instructor Status', instructor_path(current_user.instructor), class: 'sign-up-btn' %></li>
@@ -161,15 +151,10 @@
                 <%= link_to 'Sign Up', new_user_registration_path(date: params[:date], slot: params[:slot]), class: 'sign-up-btn' %>
               </li>
             <% else %>
-              <li><a href="/blog" target="_blank" class="sign-up-btn">Blog</a></li>
-              <!-- <li><a href="/tahoe-season-passes" class="sign-up-btn">Shop Deals</a></li> -->
-              <li><a href="/browse" class="sign-up-btn">Instructors</a></li>
-              <li> <%= link_to 'Teach with Us', '/apply', class: 'sign-up-btn' %></li>
+              <li><a href="/browse" class="sign-up-btn">Browse Ed Staff</a></li>
+              <li><a href="mailto:Info@psia-w.org" target="_blank" class="sign-up-btn">Contact Us</a></li>
               <li><a href="#" class="sign-up-btn" data-toggle="modal" data-target="#registerModal">Register</a></li>
               <li><a href="#" class="sign-up-btn" data-toggle="modal" data-target="#loginModal">Log In</a></li>
-<!--               <li>
-                <%= link_to 'Join the Beta - First hour free!', "/beta_users/new", class: 'btn btn-default' %>
-              </li> -->
             <% end %>
           <% end %>
         </ul>

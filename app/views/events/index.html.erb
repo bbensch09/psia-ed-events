@@ -1,5 +1,11 @@
 <div class="container">
 
+
+<% unless current_user %>
+  <h2 class="center text-warning">In order to make changes or confirm your calendar, please first log in!
+  <a href="#" class="btn sign-up-btn" data-toggle="modal" data-target="#loginModal">Log In</a> </h2>
+<% end %> 
+
 <%if current_user && current_user.user_type == "Ski Area Partner" || (current_user && current_user.email == "brian@snowschoolers.com") %>
 <div class="admin-viewable">
   <%= form_tag import_events_path, multipart: true do %>

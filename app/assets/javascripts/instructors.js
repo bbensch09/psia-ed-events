@@ -53,13 +53,73 @@ var applyFormListener = function() {
   }
 
     var selectAllLocationsListener = function() {
-    $('#selectAllPrimaryLocations').click(function() {
+    $('#selectAll-NorthTahoe').click(function() {
     if (this.checked) {
-       $('.primary-location-checkbox').each(function() {
+       $('.NorthTahoe').each(function() {
            this.checked = true;
        });
     } else {
-      $('.primary-location-checkbox').each(function() {
+      $('.NorthTahoe').each(function() {
+           this.checked = false;
+       });
+    }
+    });
+
+    $('#selectAll-SouthernCalifornia').click(function() {
+    if (this.checked) {
+       $('.SouthernCalifornia').each(function() {
+           this.checked = true;
+       });
+    } else {
+      $('.SouthernCalifornia').each(function() {
+           this.checked = false;
+       });
+    }
+    });
+
+    $('#selectAll-NorthernCalifornia').click(function() {
+    if (this.checked) {
+       $('.NorthernCalifornia').each(function() {
+           this.checked = true;
+       });
+    } else {
+      $('.NorthernCalifornia').each(function() {
+           this.checked = false;
+       });
+    }
+    });
+
+    $('#selectAll-CentralSierra').click(function() {
+    if (this.checked) {
+       $('.CentralSierra').each(function() {
+           this.checked = true;
+       });
+    } else {
+      $('.CentralSierra').each(function() {
+           this.checked = false;
+       });
+    }
+    });
+
+    $('#selectAll-Nevada').click(function() {
+    if (this.checked) {
+       $('.Nevada').each(function() {
+           this.checked = true;
+       });
+    } else {
+      $('.Nevada').each(function() {
+           this.checked = false;
+       });
+    }
+    });
+
+    $('#selectAll-SouthLakeTahoe').click(function() {
+    if (this.checked) {
+       $('.SouthLakeTahoe').each(function() {
+           this.checked = true;
+       });
+    } else {
+      $('.SouthLakeTahoe').each(function() {
            this.checked = false;
        });
     }

@@ -37,32 +37,30 @@
       <!-- <th>ID</th> -->
       <th>ID</th>
       <th></th>
-      <th>Name</th>
-      <th>Email</th>
+      <th>Name <br> Email</th>
       <th>Admin Actions</th>
       <th>Status?</th>
       <th>Discipline(s)</th>
       <th>City</th>
       <th>Home resort</th>
-      <th>Eligible locations</th>
-      <th>Ski Level</th>
-      <th>Snowboard Level</th>
-      <th>Performance Rank</th>
+      <th colpsan="2">Eligible locations</th>
+      <th></th>
+      <th>Skiing Cert</th>
+      <th>Snowboard Cert</th>
+      <th>Score</th>
     </tr>
   </thead>
 
   <tbody>
     <% @instructors.each do |instructor| %>
       <tr>
-        <td><%= instructor.id %></td>
+        <td class="center"><%= instructor.id %>
+          <br>
+          <%= link_to 'Edit', edit_instructor_path(instructor), class: 'btn btn-default' %> 
+        </td>
         <td> <%= link_to image_tag(instructor.avatar.url(:thumb), alt:"avatar-img", class:"img-responsive img-thumbnail avatar-thumbnail"), edit_instructor_path(instructor) %> </td>
-        <td><%= link_to "#{instructor.name}", show_candidate_instructor_path(instructor) %></td>
-        <!-- <td>
-          <% instructor.locations.each do |location| %>
-              <%= location.name %> <br>
-          <% end %>
-        </td> -->
-        <td> <%= instructor.contact_email %> </td>
+        <td><%= link_to "#{instructor.name}", show_candidate_instructor_path(instructor) %> <br>        
+           <%= instructor.contact_email %> </td>
         <% if instructor.status != "Active" %>
         <td><%= link_to 'Activate', verify_instructor_path(instructor), method: :post, class: 'btn btn-success' %></td>
           <% else %>
@@ -84,19 +82,19 @@
         <td></td>
         <% end %>
 
-        <td>
+        <td colspan="2">
           <% instructor.locations.each do|location| %> 
             <%= location.name %> <br>
           <% end %>
         </td>
         
         <%if instructor.ski_levels.any? %>
-        <td><%= instructor.ski_levels.max.value %></td>
+        <td><%= instructor.ski_levels.max.name %></td>
           <%else%>
           <td>N/A</td>
         <%end%>
         <%if instructor.snowboard_levels.any? %>
-        <td><%= instructor.snowboard_levels.max.value %></td>
+        <td><%= instructor.snowboard_levels.max.name %></td>
           <%else%>
           <td>N/A</td>
         <%end%>

@@ -156,7 +156,7 @@ class LessonMailer < ActionMailer::Base
 
   def instructor_status_activated(instructor)
     @instructor = instructor
-    mail(to: @instructor.user.email, cc: 'brian@snowschoolers.com', subject: "Instructor status is now Active!")
+    mail(to: @instructor.contact_email, cc: 'brian@snowschoolers.com', subject: "Instructor status is now Active!")
   end
 
   def subscriber_sign_up(beta_user)

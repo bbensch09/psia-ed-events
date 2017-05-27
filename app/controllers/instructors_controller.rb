@@ -20,7 +20,7 @@ class InstructorsController < ApplicationController
     instructor = Instructor.find(params[:id])
     instructor.status = 'Active'
     instructor.save
-    LessonMailer.instructor_status_activated(instructor).deliver
+    # LessonMailer.instructor_status_activated(instructor).deliver
     redirect_to instructors_path, notice: "Instructor has been verified"
   end
 
