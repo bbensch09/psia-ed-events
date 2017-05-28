@@ -21,25 +21,24 @@
 </div>
 <% end %>
 
-<h1 class="center">PSIA West - Scheduled Events</h1>
+<h1 class="center">PSIA West - Scheduled Education Events</h1>
 
 <div class="calendar-container hidden">
   <%= month_calendar(events: @events) do |date, events| %>
     <% if events.count > 0 %>
     <div class="day-within-week">
       <div class="daily-summary">
-        <h2 class="">Participants: <%= Lesson.bookings_for_date(date) %></h2>
         <h2 class="">Ed staff scheduled: <%= events.count { |event| event.status == "Scheduled"} %></h2>
         <h2 class="">Ed staff available: <%= events.count { |event| event.status == "TBD"} %></h2>
-        <h2 class=" <%= Event.capacity_status_color(date) %>">Remaining Capacity: <%= Event.capacity(date) %></h2>
-        <h2><a href="/schedule-filtered?utf8=✓&search_date=<%=Event.parametized_date(date)%>" class="btn btn-default">Schedule Staff</a></h2>
+        <h2 class=" <%= Event.capacity_status_color(date) %>">Instructor Capacity: <%= Event.capacity(date) %></h2>
       </div>
       <% else %>
-      <h4 class="center text-warning">No events currently scheduled</h4>
+      <h4 class="center text-warning">No events scheduled</h4>
     <% end %>
     <% events.sort_by{| event | event.status }.to_a.each do | event | %>
       <div class="<%= event.event_status_color %> instructor-event">
         <%= link_to event.name, edit_event_path(event) %> - <span class="smaller-text"><%= event.status %></span>
+        <h2><a href="/events/<%=event.id %>" class="btn btn-default">Schedule Staff</a></h2>
       </div>
     <% end %>
     </div>
@@ -49,6 +48,95 @@
 
 <hr class="deposit-hr-navy">
 
+<% @events.each do |event| %>
+
+<div class="col-md-12 event-card">
+  <h2 class="center"><%= link_to event.name, event %> - <%= event.date.strftime("%m/%d") %> @<%= link_to event.location.name, event.location %>  </h2>
+  <ul class="event-summary">
+    <li>Type: <%=event.category %> - <%=event.sport.name %>, level <%=event.staff_level %></li>
+    <li>Staff needed: <%=event.capacity/10 %></li>
+  </ul>
+  <div class="col-md-7">
+    <h4><b>Scheduled Staff</b></h4>    
+
+   <% event.sections.order(:id).each_with_index do |section, index| %>
+      <p> Staff# <%= (index+1) %>:
+        <%= section.instructor ? section.instructor.name : "TBD" %>
+        (status:<%= section.instructor_status %>)
+      </p>
+        
+      <div class="row staff-assignment">
+      <% if section.instructor_id.to_i == 0 %>
+            <% recommended_instructor = section.event.available_instructors[index] ? section.event.available_instructors[index].id : section.event.available_instructors[0] %>
+            <% if recommended_instructor.nil? %>
+              <h3 class="text-warning center">Warning - no staff available!</h3>
+            <% else%> 
+              <%= form_tag(assign_instructor_to_section_path, :method => "put", class: "in-line") do %>
+              <div class="pull-left">
+              <%= select_tag :instructor_id, options_from_collection_for_select(section.event.available_instructors, :id, :name, selected:recommended_instructor), class: 'form-control form-group assign-instructor-form' %>
+              </div>
+              <div class="hidden">              
+                <%= text_field_tag :section_id, params[:section_id], value: section.id %>
+              </div>
+              <div class="pull-left">
+                    <%= submit_tag "ASSIGN", class:"btn btn-default" %>
+              </div>
+              <% end %>
+          <% end %>
+      <% else %>
+          <%= form_tag(unassign_instructor_from_section_path, :method => "put", class: "in-line") do %>
+          <div class="hidden">              
+            <%= text_field_tag :section_id, params[:section_id], value: section.id %>
+          </div>
+            <%= submit_tag "UNASSIGN", class:"btn btn-warning" %>
+            <%= link_to "Email Staff", email_event_request_to_staff_section_path(section), class: 'btn btn-default' %>
+          <% end %>
+      <% end %>
+      <% if section.instructor_id.to_i > 0 && (current_user && current_user.email == "brian@snowschoolers.com") || section.instructor && (current_user && section.instructor.contact_email == current_user.email) %>
+        <% if section.instructor_status == "Confirmed"%>
+            <%= form_tag(cancel_instructor_path, :method => "put", class: "in-line") do %>
+            <div class="hidden">              
+              <%= text_field_tag :section_id, params[:section_id], value: section.id %>
+            </div>
+              <%= submit_tag "CANCEL", class:"btn btn-danger" %>
+            <% end %>
+          <% else %>
+            <%= form_tag(confirm_instructor_path, :method => "put", class: "in-line") do %>
+            <div class="hidden">              
+              <%= text_field_tag :section_id, params[:section_id], value: section.id %>
+            </div>
+              <%= submit_tag "CONFIRM", class:"btn btn-success" %>
+            <% end %>
+        <% end %>
+      <% else %>
+      <% end %>
+
+      </div>
+        
+
+      <% end %>
+  </div>
+
+
+  <div class="col-md-5">
+    <h4><b>Available Instructors</b></h4>    
+    <% if event.available_instructors.any? %>
+            <p>Name (performance rank), home resort location</p>
+            <ol>
+            <% event.available_instructors.each do |instructor| %>
+                 <li> <%= instructor.name %> (<%= instructor.performance_ranking %>), <%= instructor.primary_locations.first.name %> </li>
+            <% end %>
+            </ol>
+    <% end %>
+  </div>
+
+</div>
+
+<% end %>
+
+<hr class="deposit-hr-navy">
+
+<!-- 
 <table class="instructors-table">
   <thead>
     <tr>
@@ -71,8 +159,6 @@
         <td><%= event.id %></td>
         <% if event.start_time %>
         <td><%= event.date.strftime("%m/%d") %></td>
-        <!-- <td><%= event.start_time.strftime("%m/%d") %></td> -->
-        <!-- <td><%= event.start_time.strftime("%m/%d @%l%P") %></td> -->
         <% else %>
         <td></td>
         <td></td>
@@ -83,7 +169,6 @@
         <td><%= event.sport.name %></td>
         <td><%= event.location ? event.location.name : "TBD" %></td>
         <td><%= event.capacity %></td>
-        <!-- <td><%= event.sections.count %></td> -->
         <td colspan="2">
           <% if event.available_instructors.any? %>
             <ol>
@@ -93,17 +178,15 @@
             </ol>
           <% end %>
         </td>
-        <!-- <td><%= link_to 'Edit', edit_event_path(event) %></td> -->
+         <td><%= link_to 'Edit', edit_event_path(event) %></td>
         <td></td>
-        <!-- <td><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
       </tr>
         <% event.sections.order(:id).each_with_index do |section, index| %>
       <tr>
         <td colspan="2"> Staff# <%= (index+1) %></td>
         <td colspan="1"> <%= section.instructor ? section.instructor.name : "TBD" %></td>
         <td colspan="2"> Status: <%= section.instructor_status %></td>        
-        <!-- <td> Index: <%= index %></td>         -->
-        <!-- <td><%= link_to "Edit", edit_section_path(section.id), class: 'btn btn-default' %> </td> -->
+        <td><%= link_to "Edit", edit_section_path(section.id), class: 'btn btn-default' %> </td>
         <% if current_user && current_user.email == "brian@snowschoolers.com" %>
         <% if section.instructor_id.to_i == 0 %>
             <td colspan="2">
@@ -175,4 +258,4 @@
 
 <br>
 
-</div>
+</div> -->
