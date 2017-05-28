@@ -7,6 +7,21 @@ class Event < ApplicationRecord
     belongs_to :location
 
   def available_instructors
+    ids = self.available_instructor_ids.split(",")
+    instructors = []
+    ids.each do |id|
+      instructors << Instructor.find(id.to_i)      
+    end
+    instructors
+  end
+
+  def self.evaluate_all_events
+    Event.all.each do |event|
+      event.evaluate_available_instructors
+    end
+  end
+
+  def evaluate_available_instructors
     all_instructors = self.location.instructors
     eligible_instructors = all_instructors.to_a.keep_if {|instructor| instructor.sports.include?(self.sport)}
     # filter instructors based on qualifications
@@ -31,7 +46,12 @@ class Event < ApplicationRecord
     primary_instructors.each do | inst |
       ranked_instructors.unshift(inst)
     end
-    ranked_instructors.first(5)
+    ids_to_store = []
+    ranked_instructors.first(5).each do |inst|
+      ids_to_store << inst.id
+    end
+    self.available_instructor_ids = ids_to_store.join(',')
+    self.save
   end
 
   def primary_location_instructors

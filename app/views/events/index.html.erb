@@ -51,7 +51,11 @@
 <% @events.each do |event| %>
 
 <div class="col-md-12 event-card">
-  <h2 class="center"><%= link_to event.name, event %> - <%= event.date.strftime("%m/%d") %> @<%= link_to event.location.name, event.location %>  </h2>
+  <h2 class="center"><%= link_to event.name, event %> - <%= event.date.strftime("%m/%d") %> @<%= link_to event.location.name, event.location %> 
+  <% if current_user && current_user.email == "brian@snowschoolers.com" || current_user.email == "bschilling@skihomewood.com" %>
+  <%= link_to 'Edit Event', edit_event_path(event), class:'btn btn-default' %>
+  <% end %>
+    </h2>
   <ul class="event-summary">
     <li>Type: <%=event.category %> - <%=event.sport.name %>, level <%=event.staff_level %></li>
     <li>Staff needed: <%=event.capacity/10 %></li>
@@ -59,6 +63,7 @@
   <div class="col-md-7">
     <h4><b>Scheduled Staff</b></h4>    
 
+  <% @reco_index = 0 %>
    <% event.sections.order(:id).each_with_index do |section, index| %>
       <p> Staff# <%= (index+1) %>:
         <%= section.instructor ? section.instructor.name : "TBD" %>
@@ -67,7 +72,7 @@
         
       <div class="row staff-assignment">
       <% if section.instructor_id.to_i == 0 %>
-            <% recommended_instructor = section.event.available_instructors[index] ? section.event.available_instructors[index].id : section.event.available_instructors[0] %>
+            <% recommended_instructor = section.event.available_instructors[@reco_index] ? section.event.available_instructors[@reco_index].id : section.event.available_instructors[0] %>
             <% if recommended_instructor.nil? %>
               <h3 class="text-warning center">Warning - no staff available!</h3>
             <% else%> 
@@ -83,6 +88,7 @@
               </div>
               <% end %>
           <% end %>
+            <% @reco_index += 1 %>
       <% else %>
           <%= form_tag(unassign_instructor_from_section_path, :method => "put", class: "in-line") do %>
           <div class="hidden">              
@@ -121,7 +127,7 @@
   <div class="col-md-5">
     <h4><b>Available Instructors</b></h4>    
     <% if event.available_instructors.any? %>
-            <p>Name (performance rank), home resort location</p>
+            <p><em>Name (performance rank), home resort location</em></p>
             <ol>
             <% event.available_instructors.each do |instructor| %>
                  <li> <%= instructor.name %> (<%= instructor.performance_ranking %>), <%= instructor.primary_locations.first.name %> </li>
