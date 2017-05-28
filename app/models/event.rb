@@ -27,7 +27,32 @@ class Event < ApplicationRecord
 
     #rank instructors for whom the location is their home resort first
     ranked_instructors = eligible_instructors.to_a.sort! {|a,b| b.performance_ranking <=> a.performance_ranking }
+    primary_instructors = self.primary_location_instructors
+    primary_instructors.each do | inst |
+      ranked_instructors.unshift(inst)
+    end
     ranked_instructors.first(5)
+  end
+
+  def primary_location_instructors
+    primary_location = PrimaryLocation.find(self.location.id)
+    all_instructors = primary_location.instructors
+    eligible_instructors = all_instructors.to_a.keep_if {|instructor| instructor.sports.include?(self.sport)}
+    # filter instructors based on qualifications
+    case self.sport.id
+      when 1
+      eligible_instructors = eligible_instructors.to_a.keep_if {|instructor| instructor.ski_instructor? && instructor.ski_levels.max.value >= self.staff_level.to_i }
+      when 2
+      eligible_instructors = eligible_instructors.to_a.keep_if {|instructor| instructor.snowboard_instructor? && instructor.snowboard_levels.max.value >= self.staff_level.to_i }
+      else    
+    end
+    #filter instructors that are already busy on that day
+    conflicting_sections = Section.where(date: self.date)
+    busy_instructors = []
+    conflicting_sections.each do |section|
+      busy_instructors << section.instructor
+    end
+    eligible_instructors = eligible_instructors - busy_instructors
   end
 
   def self.assign_all_remaining_events

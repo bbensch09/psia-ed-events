@@ -17,9 +17,10 @@
     <% if current_user && (current_user.email == "brian@snowschoolers.com" || current_user.user_type == "Partner")%>
   <section class="">
     <div class="col-md-12 vertical-padding">
-    <h4> Link to user_id: </h4>
+    <!-- <h4> Link to user_id: </h4>
       <%= f.select :user_id, options_from_collection_for_select(User.all.sort {|a,b| a.username_for_admin <=> b.username_for_admin}, :id, :username_for_admin, selected:@instructor_id), include_blank:true %>
-    <h4>Performance Rank</h4>
+     -->
+     <h4>Performance Rank</h4>
       <%= f.text_field :performance_ranking, include_blank:false %>
     </div>
   <div class="col-md-12">
@@ -100,35 +101,34 @@
   <!-- <h4> Preferred Resorts (select up to 4)</h4> -->
   <div class="col-md-12">
   <h4> <b> Primary resort - where do you typically teach during the season?</b> </h4>
-    <input type="checkbox" id="selectAllPrimaryLocations" value="selectAll"> Select / De-select All<br/><br/>
-      <%= f.collection_check_boxes :primary_location_ids, Location.all, :id, :name do |location_item| %>
-      <div class="collection-check-box">
-        <%= location_item.check_box(class: 'primary-location-checkbox')  %>
-        <%= location_item.label %>
-      </div>
-      <% end %>
-  </div>
-  <div class="col-md-12">
-  <h4> <b> Preferred resorts - what other resorts are you happy to teach at?</b> </h4>
     <input type="checkbox" id="selectAllLocations" value="selectAll"> Select / De-select All<br/><br/>
-      <%= f.collection_check_boxes :location_ids, PrimaryLocation.all, :id, :name do |location_item| %>
-      <div class="collection-check-box">
+      <%= f.collection_check_boxes :primary_location_ids, PrimaryLocation.all, :id, :name do |location_item| %>
+      <div class="collection-check-box col-md-4">
         <%= location_item.check_box(class: 'location-checkbox')  %>
         <%= location_item.label %>
       </div>
       <% end %>
   </div>
-  <!-- <h4><b>Professional certifications</b> (PSIA, AASI, etc.) </h4>
   <div class="col-md-12">
-    <%= f.text_field :certification, placeholder: 'Do you hold any certifications?', class: 'form-control', required:true %>
-    <br>
+  <h4> <b> Available resorts - what other resorts are you happy to teach at?</b> </h4>  
+    <% regions = Location.select(:region).uniq %>
+    <% regions.each do |location| %>
+
+    <div class="region-container2">
+    <h4 class="col-md-12">
+      <input type="checkbox" id="selectAll-<%=location.region.to_s.split(' ').join('')%>" value="selectAll"> Select (deselect) all of <%=location.region%> <br/>
+    </h4>
+      <%= f.collection_check_boxes :location_ids, Location.where(region:location.region), :id, :name do |location_item| %>
+          <div class="collection-check-box region-1 col-md-3">
+            <%= location_item.check_box(class: location.region.to_s.split(' ').join(''))  %>
+            <%= location_item.label %>
+          </div>
+      <% end %>
+    </div>
+    <% end %>
   </div>
-  <h4><b>Why</b> are you excited to join Snow Schoolers?</h4>
-  <div class="col-md-12">
-    <%= f.text_area :intro, rows:5, placeholder: 'Describe your background in a few sentences', class: 'form-control', required:true %>
-    <br>
-  </div>
- -->  
+
+  
  <%= hidden_field_tag 'ga_client_id', '', :class => 'ga-client-id' %>
   <div class="row">
     <div class="col-md-12 vertical-padding">

@@ -32,9 +32,13 @@
   <ul>
     <% @event.sections.each_with_index do |section, index| %>
       <li> Staff#<%= (index+1) %>
-      <%= section.instructor ? section.instructor.name : "TBD" %>; 
-      Status: <%= section.instructor_status %>;
-      <%= link_to "Edit", edit_section_path(section.id), class: 'btn btn-default' %>
+      <%= section.instructor ? section.instructor.name : "TBD" %> <%= link_to "Edit", edit_section_path(section.id), class: 'btn btn-default' %>
+      </li>
+      <% event = {text:@event.name, date:"#{@event.date.to_s.gsub(/-/,'')}T160000Z/#{@event.date.to_s.gsub(/-/,'')}T230000Z", location:@event.location.address, description:"This is a #{@event.category} event and requires a minimum level #{@event.staff_level} status." } %>
+      <br>
+      <li> Status: <%= section.instructor_status %>      
+        <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=<%=event[:text]%>&dates=<%=event[:date]%>&details=<%=event[:description] %>&location=<%=event[:location] %>&sf=true&output=xml" class="btn btn-default" target="_blank"> Add to Google Calendar</a>
+        <!-- <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=<%=event[:text]%>&dates=20170601T160000Z/20170601T230000Z&details=For+details,+link+here:+http://www.example.com&location=Waldorf+Astoria,+301+Park+Ave+,+New+York,+NY+10022&sf=true&output=xml" class="btn btn-default" target="_blank"> Add to Calendar: test2</a> -->
       </li>
 
   <% end %>
