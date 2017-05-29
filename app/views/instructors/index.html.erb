@@ -6,7 +6,7 @@
 <h2>
   <%= file_field_tag :file, class: 'form-control' %> <%= submit_tag "Import Instructors from CSV", class: 'btn btn-default' %>
 <% end %> | 
-  <%= link_to "Export CSV", instructors_path(format: "csv"), class: 'btn btn-primary' %> |  <%= link_to 'Delete all Staff', delete_all_instructors_path, method: :delete_all, data: { confirm: 'Are you sure?' },  class: 'btn btn-danger' %>
+  <%= link_to "Export CSV", instructors_path(format: "csv"), class: 'btn btn-primary' %> |  <%= link_to 'Delete all Staff', delete_all_instructors_path, method: :delete_all, data: { confirm: 'Are you sure?' },  class: 'btn btn-danger' %> | <%= link_to 'New Staff Member', new_instructor_path, class: 'btn btn-success' %>
 </h2>
 
 

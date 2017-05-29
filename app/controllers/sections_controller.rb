@@ -41,6 +41,17 @@ class SectionsController < ApplicationController
     redirect_to :back   
   end
 
+  def decline_instructor
+    @section = Section.find(params[:section_id])
+    @instructor = @section.instructor
+    @section.instructor_status = "Declined"    
+    @section.instructor_id = nil
+    @section.save!
+    @section.event.update_status
+    LessonMailer.staff_declined_event(@section,@instructor).deliver
+    redirect_to :back   
+  end
+
   def email_event_request_to_staff
     LessonMailer.email_event_request_to_staff(@section).deliver
     redirect_to events_path, notice: "Email successfully sent to #{@section.instructor.contact_email}."

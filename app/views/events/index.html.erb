@@ -121,6 +121,12 @@
             </div>
               <%= submit_tag "CONFIRM", class:"btn btn-success" %>
             <% end %>
+            <%= form_tag(decline_instructor_path, :method => "put", class: "in-line") do %>
+            <div class="hidden">              
+              <%= text_field_tag :section_id, params[:section_id], value: section.id %>
+            </div>
+              <%= submit_tag "DECLINE", class:"btn btn-danger" %>
+            <% end %>
         <% end %>
       <% end %>
 
