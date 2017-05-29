@@ -104,7 +104,7 @@
             <%= link_to "Email Staff", email_event_request_to_staff_section_path(section), class: 'btn btn-default' %>
           <% end %>
       <% end %>
-      <% if section.instructor_id.to_i > 0 && (current_user && current_user.email == "brian@snowschoolers.com") || section.instructor && (current_user && section.instructor.contact_email == current_user.email) %>
+      <% if section.instructor_id.to_i > 0 && (current_user && current_user.email == "brian@snowschoolers.com" || current_user.user_type == "Ski Area Partner") || section.instructor && (current_user && section.instructor.contact_email == current_user.email) %>
        <% gcal_event = {text:section.event.name, date:"#{section.event.date.to_s.gsub(/-/,'')}T170000Z/#{section.event.date.to_s.gsub(/-/,'')}T240000Z", location:section.event.location.address, description:"This is a #{section.event.category} event and requires a minimum level #{section.event.staff_level} status." } %>  
         <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=<%=gcal_event[:text]%>&dates=<%=gcal_event[:date]%>&details=<%=gcal_event[:description] %>&location=<%=gcal_event[:location] %>&sf=true&output=xml" class="btn btn-default" target="_blank"> Add to Google Calendar</a>
         <% if section.instructor_status == "Confirmed"%>
