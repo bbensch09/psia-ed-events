@@ -34,7 +34,7 @@
       <li> Staff#<%= (index+1) %>
       <%= section.instructor ? section.instructor.name : "TBD" %> <%= link_to "Edit", edit_section_path(section.id), class: 'btn btn-default' %>
       </li>
-      <% event = {text:@event.name, date:"#{@event.date.to_s.gsub(/-/,'')}T160000Z/#{@event.date.to_s.gsub(/-/,'')}T230000Z", location:@event.location.address, description:"This is a #{@event.category} event and requires a minimum level #{@event.staff_level} status." } %>
+      <% event = {text:@event.name, date:"#{@event.date.to_s.gsub(/-/,'')}T170000Z/#{@event.date.to_s.gsub(/-/,'')}T240000Z", location:@event.location.address, description:"This is a #{@event.category} event and requires a minimum level #{@event.staff_level} status." } %>
       <br>
       <li> Status: <%= section.instructor_status %>      
         <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=<%=event[:text]%>&dates=<%=event[:date]%>&details=<%=event[:description] %>&location=<%=event[:location] %>&sf=true&output=xml" class="btn btn-default" target="_blank"> Add to Google Calendar</a>
