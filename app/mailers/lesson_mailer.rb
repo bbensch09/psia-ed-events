@@ -6,6 +6,11 @@ class LessonMailer < ActionMailer::Base
     mail(to: section.instructor.contact_email, cc:'brian@snowschoolers.com', subject: "PSIA Ed Staff Scheduling Request - #{@section.name} on #{@section.date}" )
   end
 
+  def staff_confirmation_for_event(section)
+    @section = section
+    mail(to: 'brian@snowschoolers.com', subject: "Ed Staff confirmation - #{@section.event.name} on #{@section.date}" )
+  end
+
   def email_full_schedule(instructor)
     @instructor = instructor
     mail(to: instructor.contact_email, cc:'brian@snowschoolers.com', subject: "PSIA Ed Staff Schedule Updates for #{@instructor.name} - please review" )

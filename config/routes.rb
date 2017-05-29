@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get  'assign-all-remaining'   => 'events#assign_all_remaining_events',   as: :assign_all_events
   get  'unassign-all'   => 'events#unassign_all_events',   as: :unassign_all_events
   get  'email-schedules-to-staff'   => 'events#email_all_staff',   as: :email_all_staff
+  get  'events-to-be-scheduled'   => 'events#index_to_be_scheduled',   as: :index_to_be_scheduled
+  get  'events-to-be-confirmed'   => 'events#index_to_be_confirmed',   as: :index_to_be_confirmed
 
   resources :events do 
     collection {post :import}

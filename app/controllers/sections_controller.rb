@@ -8,7 +8,8 @@ class SectionsController < ApplicationController
     @section.instructor_id = @instructor.id
     @section.instructor_status = "Assigned"    
     @section.save!
-    redirect_to events_path   
+    # @section.event.update_status
+    redirect_to :back   
   end
 
   def unassign_instructor_from_section
@@ -17,7 +18,7 @@ class SectionsController < ApplicationController
     @section.instructor_id = nil
     @section.instructor_status = "Unassigned"    
     @section.save!
-    redirect_to events_path   
+    redirect_to :back   
   end
 
   def confirm_instructor
@@ -25,7 +26,9 @@ class SectionsController < ApplicationController
     @section = Section.find(params[:section_id])
     @section.instructor_status = "Confirmed"    
     @section.save!
-    redirect_to review_events_path   
+    @section.event.update_status
+    LessonMailer.staff_confirmation_for_event(@section).deliver
+    redirect_to :back, notice: "Thank you. Your confirmation for this event has been received."
   end
 
   def cancel_instructor
@@ -34,7 +37,8 @@ class SectionsController < ApplicationController
     @section.instructor_status = "Canceled"    
     @section.instructor_id = nil
     @section.save!
-    redirect_to review_events_path   
+    @section.event.update_status
+    redirect_to :back   
   end
 
   def email_event_request_to_staff

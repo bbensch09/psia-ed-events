@@ -1,16 +1,7 @@
-<p id="notice"><%= notice %></p>
-
+<div class="container">
 <p>
   <strong>Ski Area name:</strong>
   <%= @location.name %>
-</p>
-<p>
-  <strong>Partner Status:</strong>
-  <%= @location.partner_status %>
-</p>
-<p>
-  <strong>Calendar Status:</strong>
-  <%= @location.calendar_status %>
 </p>
 <p>
   <strong>Region:</strong>
@@ -20,14 +11,76 @@
   <strong>State:</strong>
   <%= @location.state %>
 </p>
-<p>
-  <strong>city:</strong>
-  <%= @location.city %>
-</p>
-<p>
-  <strong>state_abbreviation:</strong>
-  <%= @location.state_abbreviation %>
-</p>
+
+<h2 class="center">All Staff Eligible at <%= @location.name %> </h2>
+<table class="instructors-table">
+  <thead>
+    <tr>
+<!--       <th>First</th>
+      <th>Last</th> -->
+      <!-- <th>ID</th> -->
+      <th>ID</th>
+      <th></th>
+      <th>Name <br> Email</th>
+      <th>Admin Actions</th>
+      <th>Status?</th>
+      <th>Discipline(s)</th>
+      <th>City</th>
+      <th>Home resort</th>
+      <th>Skiing Cert</th>
+      <th>Snowboard Cert</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% instructors = PrimaryLocation.find(@location.id).instructors + @location.instructors %>
+    <% instructors.each do |instructor| %>
+      <tr>
+        <td class="center"><%= instructor.id %>
+          <br>
+          <%= link_to 'Edit', edit_instructor_path(instructor), class: 'btn btn-default' %> 
+        </td>
+        <td> <%= link_to image_tag(instructor.avatar.url(:thumb), alt:"avatar-img", class:"img-responsive img-thumbnail avatar-thumbnail"), edit_instructor_path(instructor) %> </td>
+        <td><%= link_to "#{instructor.name}", instructor %> <br>        
+           <%= instructor.contact_email %> </td>
+        <% if instructor.status != "Active" %>
+        <td><%= link_to 'Activate', verify_instructor_path(instructor), method: :post, class: 'btn btn-success' %></td>
+          <% else %>
+        <td><%= link_to 'Revoke', revoke_instructor_path(instructor), method: :post, class: 'btn btn-danger' %></td>
+        <% end %>
+        <td><%= instructor.status %></td>
+        <% if instructor.sport_ids.count > 0 %>
+          <td><% instructor.sport_ids.each do |sport_id| %>
+            <span><%= Sport.find(sport_id).name %></span> <br>
+            <% end %> 
+          </td>
+          <% else %>
+          <td></td>
+        <% end %>
+        <td><%= instructor.city %></td>
+        <% if instructor.primary_location_ids.count > 0 %>
+        <td><%= Location.find(instructor.primary_location_ids.first).name %> </td>
+        <% else %>
+        <td></td>
+        <% end %>        
+        <%if instructor.ski_levels.any? %>
+        <td><%= instructor.ski_levels.max.name %></td>
+          <%else%>
+          <td>N/A</td>
+        <%end%>
+        <%if instructor.snowboard_levels.any? %>
+        <td><%= instructor.snowboard_levels.max.name %></td>
+          <%else%>
+          <td>N/A</td>
+        <%end%>
+        <td><%= instructor.performance_ranking %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
 
 <%= link_to 'Edit', edit_location_path(@location) %> |
 <%= link_to 'Back', locations_path %>
+</div>

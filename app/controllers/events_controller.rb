@@ -25,10 +25,11 @@ class EventsController < ApplicationController
   end
 
   def review_events
-    current_instructor = Instructor.find_by(contact_email: current_user.email)
-    @events = Event.joins(:sections).where(sections: { instructor_id: current_instructor.id})
-    if current_user.email == "brian@snowschoolers.com"
-      @events = Event.all
+    if current_instructor = Instructor.find_by(contact_email: current_user.email)
+      @events = Event.joins(:sections).where(sections: { instructor_id: current_instructor.id})
+      @events = @events.sort_by { |event| event.start_time}
+    elsif current_user.email == "brian@snowschoolers.com" || current_user.email == "bschilling@skihomewood.com"
+      @events = Event.all.sort_by { |event| event.start_time}
     end
     respond_to do |format|
           format.html
@@ -38,11 +39,24 @@ class EventsController < ApplicationController
     render 'index'
   end
 
+  def index_to_be_scheduled
+      Event.evaluate_all_events
+      @events = Event.where(status: "New Event")
+      @events = @events.sort_by { |event| event.start_time}
+      render 'index'
+  end
+
+  def index_to_be_confirmed
+      Event.evaluate_all_events
+      @events = Event.where(status: "Staff Assigned")
+      @events = @events.sort_by { |event| event.start_time}
+      render 'index'
+  end
   # GET /events
   # GET /events.json
   def index   
     Event.evaluate_all_events
-    @events = Event.all.sort_by { |event| event.start_time}
+    @events = Event.all.sort_by { |event| event.id}
     @events_to_csv = Event.all
     respond_to do |format|
           format.html

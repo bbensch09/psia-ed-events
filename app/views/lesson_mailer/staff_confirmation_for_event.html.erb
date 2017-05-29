@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>    
+    <p>
+      Good news!
+    </p>
+    <p>
+      We have received confirmation from <%= @section.instructor.name %> that they are availabile to work the event below.
+    </p>
+    <div class='row'>
+      <h4><strong>Event Info</strong></h4>
+
+      <ul>
+          <li><%= @section.event.name %> </li>
+          <li>Location:<%= @section.event.location.name %> </li>
+          <li>Date: <%= @section.event.date.strftime("%A %b #{@section.event.date.day.ordinalize}, %Y") %></li>
+      </ul>
+    </div>
+  </body>
+</html>

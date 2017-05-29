@@ -28,7 +28,7 @@
   
     </div>
     <div class="col-md-4">
-    <%= f.input :status, as: :select, collection: ['New Event', 'Scheduling Staff','Scheduled'], include_blank: 'Status'  %>
+    <%= f.input :status, as: :select, collection: ['New Event', 'Staff Assigned','Staff Confirmed'], include_blank: 'Status'  %>
     </div>
     <div class="col-md-6">
       <%= f.input :capacity, placeholder: 'Capacity', required:true  %>
@@ -47,4 +47,32 @@
     </div>
   <% end %>
 <% end %>
+
+<h1>Instructors Sections for this Event</h1>
+
+<table class="instructors-table">
+  <thead>
+    <tr>
+      <th>Instructor</th>
+      <th>Status</th>
+      <th>Sport</th>
+      <th>Capacity</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @event.sections.each do |section| %>
+      <tr>
+        <td><%= section.instructor ? section.instructor.name : "TBD" %></td>
+        <td><%= section.instructor_status %></td>
+        <td><%= section.sport.name %></td>
+        <td><%= section.capacity %></td>
+        <td><%= link_to 'Show', section %></td>
+        <td><%= link_to 'Edit', edit_section_path(section) %></td>
+        <td><%= link_to 'Destroy', section, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 </div>

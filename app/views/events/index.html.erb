@@ -16,6 +16,9 @@
     | <%= link_to "Auto-Assign", assign_all_events_path, class: 'btn btn-success' %>
     | <%= link_to "Unassign All", unassign_all_events_path, class: 'btn btn-warning' %>
     | <%= link_to "Email All Staff", email_all_staff_path, class: 'btn btn-warning' %>
+    | <%= link_to "View All Events ", events_path, class: 'btn btn-success' %>
+    | <%= link_to "View Events needing to be Scheduled", index_to_be_scheduled_path, class: 'btn btn-success' %>
+    | <%= link_to "View Events needing to be Confirmed", index_to_be_confirmed_path, class: 'btn btn-success' %>
 
   </h2>
 </div>
@@ -57,6 +60,7 @@
   <% end %>
     </h2>
   <ul class="event-summary">
+    <li>Event ID: <%=event.id%>; Status: <%=event.status %></li>
     <li>Type: <%=event.category %> - <%=event.sport.name %>, level <%=event.staff_level %></li>
     <li>Staff needed: <%=event.capacity/10 %></li>
   </ul>
@@ -74,7 +78,9 @@
       <% if section.instructor_id.to_i == 0 %>
             <% recommended_instructor = section.event.available_instructors[@reco_index] ? section.event.available_instructors[@reco_index].id : section.event.available_instructors[0] %>
             <% if recommended_instructor.nil? %>
-              <h3 class="text-warning center">Warning - no staff available!</h3>
+              <h3 class="text-warning center">Warning - no staff available!
+              <%= link_to "Review all staff at this location", event.location, class: "btn btn-warning" %>
+              </h3>
             <% else%> 
               <%= form_tag(assign_instructor_to_section_path, :method => "put", class: "in-line") do %>
               <div class="pull-left">
@@ -89,7 +95,7 @@
               <% end %>
           <% end %>
             <% @reco_index += 1 %>
-      <% else %>
+      <% elsif current_user && current_user.email == "brian@snowschoolers.com" || current_user.email == "bschilling@skihomewood.com" %>
           <%= form_tag(unassign_instructor_from_section_path, :method => "put", class: "in-line") do %>
           <div class="hidden">              
             <%= text_field_tag :section_id, params[:section_id], value: section.id %>

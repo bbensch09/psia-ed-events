@@ -135,6 +135,7 @@
             <% if current_user.instructor.nil? %>
                 <li><%= link_to name, "#", class: "nav-email-noaction" %></li>
                 <li><a href="/browse" class="sign-up-btn">Browse Ed Staff</a></li>
+                <li><a href="/events/review" class="sign-up-btn"> Review My Events </a></li>
               <% elsif current_user.active_instructor? %>
                 <li><%= link_to name, instructor_path(current_user.instructor) %></li>
                 <li><a href="/events/review" class="sign-up-btn"> Review Schedule </a></li>
