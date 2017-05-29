@@ -170,6 +170,7 @@ Rails.application.routes.draw do
   put   'sections/remove-instructor-from-section'   => 'sections#unassign_instructor_from_section',   as: :unassign_instructor_from_section
   put   'sections/confirm-instructor'   => 'sections#confirm_instructor',   as: :confirm_instructor
   put   'sections/cancel-instructor'   => 'sections#cancel_instructor',   as: :cancel_instructor
+  put   'sections/decline-instructor'   => 'sections#decline_instructor',   as: :decline_instructor
   # post   'sections/send-confirmation-email'   => 'sections#email_event_request_to_staff',   as: :email_event_request_to_staff
 
 
@@ -185,7 +186,7 @@ Rails.application.routes.draw do
   get 'new_request/:id' => 'lessons#new_request'
   put   'lessons/:id/set_instructor'      => 'lessons#set_instructor',      as: :set_instructor
   put   'lessons/:id/admin_reconfirm_state'      => 'lessons#admin_reconfirm_state',      as: :admin_reconfirm_state
-  put   'lessons/:id/decline_instructor'      => 'lessons#decline_instructor',      as: :decline_instructor
+  # put   'lessons/:id/decline_instructor'      => 'lessons#decline_instructor',      as: :decline_instructor
   put   'lessons/:id/remove_instructor'   => 'lessons#remove_instructor',   as: :remove_instructor
   put   'lessons/:id/mark_lesson_complete'   => 'lessons#mark_lesson_complete',   as: :mark_lesson_complete
   patch 'lessons/:id/confirm_lesson_time' => 'lessons#confirm_lesson_time', as: :confirm_lesson_time

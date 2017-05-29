@@ -35,7 +35,7 @@
 
   <tbody>
     <% instructors = PrimaryLocation.find(@location.id).instructors + @location.instructors %>
-    <% instructors.each do |instructor| %>
+    <% instructors.uniq.each do |instructor| %>
       <tr>
         <td class="center"><%= instructor.id %>
           <br>

@@ -1,7 +1,7 @@
 
 <!-- REGISTER -->
 <div id="apply" class="navy-text">
- <div class="apply-container">
+ <div class="container">
   <%= form_for @instructor do |f| %>
   <% if @instructor.errors.any? %>
     <div id="error_explanation">
@@ -135,7 +135,7 @@
       <% if controller.action_name == 'edit' %>
       <%= f.submit "Update Instructor Profile", class: "btn btn-primary btn-xl page-scroll pull-right push-bottom" %>
       <% else %>
-      <%= f.submit "Submit Application", class: "btn btn-primary btn-xl page-scroll pull-right push-bottom" %>
+      <%= f.submit "Submit", class: "btn btn-primary btn-xl page-scroll pull-right push-bottom" %>
       <% end %>
     </div>
   </div>
