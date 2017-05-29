@@ -59,12 +59,12 @@
   <%= link_to 'Edit Event', edit_event_path(event), class:'btn btn-default' %>
   <% end %>
     </h2>
-  <ul class="event-summary">
+<!--   <ul class="event-summary">
     <li>Event ID: <%=event.id%>; Status: <%=event.status %></li>
     <li>Type: <%=event.category %> - <%=event.sport.name %>, level <%=event.staff_level %></li>
     <li>Staff needed: <%=event.capacity/10 %></li>
   </ul>
-  <div class="col-md-7">
+ -->  <div class="col-md-7">
     <h4><b>Scheduled Staff</b></h4>    
 
   <% @reco_index = 0 %>
@@ -105,6 +105,8 @@
           <% end %>
       <% end %>
       <% if section.instructor_id.to_i > 0 && (current_user && current_user.email == "brian@snowschoolers.com") || section.instructor && (current_user && section.instructor.contact_email == current_user.email) %>
+       <% gcal_event = {text:section.event.name, date:"#{section.event.date.to_s.gsub(/-/,'')}T170000Z/#{section.event.date.to_s.gsub(/-/,'')}T240000Z", location:section.event.location.address, description:"This is a #{section.event.category} event and requires a minimum level #{section.event.staff_level} status." } %>  
+        <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=<%=gcal_event[:text]%>&dates=<%=gcal_event[:date]%>&details=<%=gcal_event[:description] %>&location=<%=gcal_event[:location] %>&sf=true&output=xml" class="btn btn-default" target="_blank"> Add to Google Calendar</a>
         <% if section.instructor_status == "Confirmed"%>
             <%= form_tag(cancel_instructor_path, :method => "put", class: "in-line") do %>
             <div class="hidden">              
@@ -120,12 +122,10 @@
               <%= submit_tag "CONFIRM", class:"btn btn-success" %>
             <% end %>
         <% end %>
-      <% else %>
       <% end %>
 
       </div>
         
-
       <% end %>
   </div>
 
