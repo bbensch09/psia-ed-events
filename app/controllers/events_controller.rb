@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy]
   before_action :set_week_start_monday  
-  skip_before_action :authenticate_user!
+  skip_before_action :authenticate_user!, except: [:review_events]
 
   def email_all_staff
     staff_to_email = Instructor.all.to_a.keep_if{|i| i.sections.count > 0 }
