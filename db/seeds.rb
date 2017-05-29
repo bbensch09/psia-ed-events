@@ -316,12 +316,12 @@ Sport.create!({name: "Nordic"})
 Sport.create!({name: "Adaptive"})
 
 SkiLevel.create!({
-  name: "Trainer - Ed Events only",
-  value: 1
+  name: "Trainer - Clinics only",
+  value: 0
   })
 SnowboardLevel.create!({
-  name: "Trainer - Ed Events only",
-  value: 1
+  name: "Trainer - Clinics only",
+  value: 0
   })
 
 levels = [    

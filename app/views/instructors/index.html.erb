@@ -59,7 +59,7 @@
           <%= link_to 'Edit', edit_instructor_path(instructor), class: 'btn btn-default' %> 
         </td>
         <td> <%= link_to image_tag(instructor.avatar.url(:thumb), alt:"avatar-img", class:"img-responsive img-thumbnail avatar-thumbnail"), edit_instructor_path(instructor) %> </td>
-        <td><%= link_to "#{instructor.name}", show_candidate_instructor_path(instructor) %> <br>        
+        <td><%= link_to "#{instructor.name}", instructor %> <br>        
            <%= instructor.contact_email %> </td>
         <% if instructor.status != "Active" %>
         <td><%= link_to 'Activate', verify_instructor_path(instructor), method: :post, class: 'btn btn-success' %></td>

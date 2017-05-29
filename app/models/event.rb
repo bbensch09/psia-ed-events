@@ -7,9 +7,62 @@ class Event < ApplicationRecord
     belongs_to :location
 
   def available_instructors
+    if !self.available_instructor_ids.nil?
+    ids = self.available_instructor_ids.split(",")
+    instructors = []
+    ids.each do |id|
+      instructors << Instructor.find(id.to_i)      
+    end
+    instructors
+    else
+      instructors = []
+    end
+  end
+
+  def update_status
+    staff_unassigned = 0
+    staff_assigned = 0
+    staff_confirmed = 0
+    self.sections.each do |section|
+      case section.instructor_status
+      when "Unassigned"
+        staff_unassigned +=1
+      when "Assigned"
+        staff_assigned +=1
+      when "Confirmed"
+        staff_assigned +=1
+        staff_confirmed +=1
+      end
+    end
+    if staff_confirmed == self.capacity / 10
+      self.status = "Staff Confirmed"
+    elsif staff_assigned == self.capacity / 10
+      self.status = "Staff Assigned"
+    else
+      self.status = "New Event"
+    end
+    self.save!
+  end
+
+  def self.evaluate_all_events
+    Event.all.each do |event|
+      event.evaluate_available_instructors
+      event.update_status
+    end
+  end
+
+  def print_instructor_names(array)
+    puts "::::::::: at this stage, below instructors are eligible::::::::::"
+    array.each do |instructor|
+      puts instructor.name
+    end
+  end
+
+  def evaluate_available_instructors
     all_instructors = self.location.instructors
     eligible_instructors = all_instructors.to_a.keep_if {|instructor| instructor.sports.include?(self.sport)}
     # filter instructors based on qualifications
+    print_instructor_names(eligible_instructors)
     case self.sport.id
       when 1
       eligible_instructors = eligible_instructors.to_a.keep_if {|instructor| instructor.ski_instructor? && instructor.ski_levels.max.value >= self.staff_level.to_i }
@@ -31,7 +84,12 @@ class Event < ApplicationRecord
     primary_instructors.each do | inst |
       ranked_instructors.unshift(inst)
     end
-    ranked_instructors.first(5)
+    ids_to_store = []
+    ranked_instructors.first(5).each do |inst|
+      ids_to_store << inst.id
+    end
+    self.available_instructor_ids = ids_to_store.uniq.join(',')
+    self.save
   end
 
   def primary_location_instructors
@@ -59,11 +117,17 @@ class Event < ApplicationRecord
     events = Event.joins(:sections).where(sections: {instructor_id:nil})
     events.each do |event|
       event.sections.each do |section|
-        section.instructor_id = section.event.available_instructors.first ? section.event.available_instructors.first.id : nil
+        if section.event.available_instructors.count > 0
+        section.instructor_id = section.event.available_instructors.first.id
         section.instructor_status = 'Assigned'
         section.save!
+        event.evaluate_available_instructors
+        else
+        section.instructor_status = 'Unassigned'
+        end
+        section.save!
       end
-      event.save!
+      event.update_status
     end
   end
   
