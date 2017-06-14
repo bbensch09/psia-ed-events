@@ -3,7 +3,7 @@ require 'csv'
 class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, #:validatable,
-         :lockable, :timeoutable, #:confirmable,
+         :lockable, :timeoutable, :confirmable,
          :omniauthable, :omniauth_providers => [:facebook]
 
   validates :password, length: { in: 5..128 }, on: :create
