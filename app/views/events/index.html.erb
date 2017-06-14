@@ -6,7 +6,7 @@
   <a href="#" class="btn sign-up-btn" data-toggle="modal" data-target="#loginModal">Log In</a> </h2>
 <% end %> 
 
-<%if current_user && current_user.user_type == "Ski Area Partner" || (current_user && current_user.email == "brian@snowschoolers.com") %>
+<%if current_user && (current_user.user_type == "Ski Area Partner" || (current_user && current_user.email == "brian@snowschoolers.com")) %>
 <div class="admin-viewable">
   <%= form_tag import_events_path, multipart: true do %>
   <h2>
@@ -55,7 +55,7 @@
 
 <div class="col-md-12 event-card">
   <h2 class="center"><%= link_to event.name, event %> - <%= event.date.strftime("%m/%d") %> @<%= link_to event.location.name, event.location %> 
-  <% if current_user && current_user.email == "brian@snowschoolers.com" || current_user.email == "bschilling@skihomewood.com" %>
+  <% if current_user && (current_user.email == "brian@snowschoolers.com" || current_user.email == "bschilling@skihomewood.com") %>
   <%= link_to 'Edit Event', edit_event_path(event), class:'btn btn-default' %>
   <% end %>
     </h2>
@@ -95,7 +95,7 @@
               <% end %>
           <% end %>
             <% @reco_index += 1 %>
-      <% elsif current_user && current_user.email == "brian@snowschoolers.com" || current_user.email == "bschilling@skihomewood.com" %>
+      <% elsif current_user && (current_user.email == "brian@snowschoolers.com" || current_user.email == "bschilling@skihomewood.com") %>
           <%= form_tag(unassign_instructor_from_section_path, :method => "put", class: "in-line") do %>
           <div class="hidden">              
             <%= text_field_tag :section_id, params[:section_id], value: section.id %>
@@ -104,7 +104,7 @@
             <%= link_to "Email Staff", email_event_request_to_staff_section_path(section), class: 'btn btn-default' %>
           <% end %>
       <% end %>
-      <% if section.instructor_id.to_i > 0 && (current_user && current_user.email == "brian@snowschoolers.com" || current_user.user_type == "Ski Area Partner") || section.instructor && (current_user && section.instructor.contact_email == current_user.email) %>
+      <% if section.instructor_id.to_i > 0 && current_user && (current_user.email == "brian@snowschoolers.com" || current_user.user_type == "Ski Area Partner") || section.instructor && (current_user && section.instructor.contact_email == current_user.email) %>
        <% gcal_event = {text:section.event.name, date:"#{section.event.date.to_s.gsub(/-/,'')}T170000Z/#{section.event.date.to_s.gsub(/-/,'')}T240000Z", location:section.event.location.address, description:"This is a #{section.event.category} event and requires a minimum level #{section.event.staff_level} status." } %>  
         <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=<%=gcal_event[:text]%>&dates=<%=gcal_event[:date]%>&details=<%=gcal_event[:description] %>&location=<%=gcal_event[:location] %>&sf=true&output=xml" class="btn btn-default" target="_blank"> Add to Google Calendar</a>
         <% if section.instructor_status == "Confirmed"%>
